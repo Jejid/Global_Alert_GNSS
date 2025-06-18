@@ -1,17 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'dart:math';
-import '../models/alert_message.dart';
+import 'models/alert_message.dart';
+import 'services/alert_service.dart';
 
+void main() => runApp(GlobalAlertApp());
 
-void main() {
-  runApp(const GlobalAlertGNSSApp());
-}
-
-class GlobalAlertGNSSApp extends StatelessWidget {
-  const GlobalAlertGNSSApp({super.key});
-
+class GlobalAlertApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -21,75 +14,79 @@ class GlobalAlertGNSSApp extends StatelessWidget {
         primaryColor: Colors.deepOrange,
         scaffoldBackgroundColor: Colors.black,
       ),
-      home: const HomeScreen(),
+      home: AlertsListScreen(),
     );
   }
 }
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  AlertMessage? _alert;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadAlert();
-  }
-
-  Future<void> _loadAlert() async {
-    final String response = await rootBundle.loadString('assets/alerts.json');
-    final List<dynamic> data = jsonDecode(response);
-    final alerts = data.map((json) => AlertMessage.fromJson(json)).toList();
-
-    //final randomAlert = alerts[2];
-    final randomAlert = alerts[Random().nextInt(alerts.length)];
-    setState(() {
-      _alert = randomAlert;
-    });
-  }
-
+class AlertsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (_alert == null) {
-      return const Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
-    }
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Global Alert GNSS'),
-        backgroundColor: Colors.red[600],
+        title: const Text('Alertas GNSS'),
+        backgroundColor: Colors.red[700],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.warning_amber_rounded, size: 100, color: Colors.red),
-            const SizedBox(height: 25),
-            Text(
-              _alert!.title,
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _alert!.message,
-              style: const TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+      body: FutureBuilder<List<AlertMessage>>(
+        future: AlertService.loadAlerts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            debugPrint('Error en snapshot: ${snapshot.error}');
+            debugPrint('StackTrace: ${snapshot.stackTrace}');
+            return Center(child: Text('Error al cargar alertas'));
+          }
+          final alerts = snapshot.data!;
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: alerts.length,
+            itemBuilder: (context, i) {
+              final alert = alerts[i];
+              return Card(
+                color: Colors.redAccent.shade200,
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        alert.title,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        alert.message,
+                        style: const TextStyle(fontSize: 16, color: Colors.white70),
+                      ),
+                      const SizedBox(height: 12),
+                      if (alert.locations != null)
+                        Text(
+                          'Coordenadas: ' +
+                              alert.locations!
+                                  .map((loc) => '${loc.lat.toStringAsFixed(3)}, ${loc.lon.toStringAsFixed(3)}')
+                                  .join(' | '),
+                          style: const TextStyle(color: Colors.white54),
+                        ),
+                      if (alert.validUntil != null)
+                        Text(
+                          'Válido hasta: ${alert.validUntil!.toLocal()}',
+                          style: const TextStyle(color: Colors.white54),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 }
-
-
