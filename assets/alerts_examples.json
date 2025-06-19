@@ -5,9 +5,9 @@
     "type": "rescue",
     "scope": "individual",
     "target": { "mac": "00:1A:2B:3C:4D:5E" },
-    "timestamp": "2025-06-10T12:00:00Z",
+    "timestamp": "2025-06-18T12:00:00Z",
     "message": "Estamos en camino. Ruta de búsqueda comenzará en coordenadas -4.123, -69.123. Luego las demas de la lista, verifica en mapa ",
-    "regions": null,
+    "regions": "Acacías Meta",
     "locations": [
       { "lat": 4.123, "lon": -74.123, "radius_km": 10 },
       { "lat": 5.000, "lon": -75.000, "radius_km": 20 }
@@ -64,7 +64,7 @@
     "type": "missing",
     "scope": "zonal",
     "target": null,
-    "timestamp": "2025-06-10T12:20:00Z",
+    "timestamp": "2025-06-16T12:20:00Z",
     "message": "Se busca a Juan Pérez, desaparecido desde ayer en zona selvática del Vaupés.",
     "regions": "Vaupés",
     "locations": [{ "lat": -0.5, "lon": -70.5, "radius_km": 5 }],

@@ -7,7 +7,7 @@ class MapScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const initialPosition = CameraPosition(
-      target: LatLng(0, 0), // Ubicación inicial (puedes cambiar luego)
+      target: LatLng(4.236479, -72.708779), // Ubicación inicial (puedes cambiar luego)
       zoom: 2.0,
     );
 
