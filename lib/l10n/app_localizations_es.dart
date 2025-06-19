@@ -25,4 +25,19 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get loadingError => 'Error al cargar alertas';
+
+  @override
+  String get appTitle => 'Alertas Globales GNSS';
+
+  @override
+  String get recentAlerts => 'Alertas Recientes';
+
+  @override
+  String get noRecentAlerts => 'No hay alertas recientes';
+
+  @override
+  String get alertMap => 'Mapa de Alertas';
+
+  @override
+  String get viewHistory => 'Ver Historial';
 }

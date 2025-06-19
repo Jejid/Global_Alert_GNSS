@@ -43,7 +43,7 @@ class AlertsListScreen extends StatelessWidget {
                   );
                 },
                 child: Card(
-                  color: getAlertColor(alert.type),
+                  color: AlertUtils.getAlertColor(alert.type),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                   elevation: 6,
                   margin: const EdgeInsets.symmetric(vertical: 10),
@@ -54,7 +54,7 @@ class AlertsListScreen extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            Icon(getAlertIcon(alert.type), color: Colors.white, size: 28),
+                            Icon(AlertUtils.getAlertIcon(alert.type), color: Colors.white, size: 28),
                             const SizedBox(width: 8),
                             Expanded(
                               child: Text(
@@ -83,7 +83,7 @@ class AlertsListScreen extends StatelessWidget {
                           ),
                         if (alert.validUntil != null)
                           Text(
-                            '${loc.validUntil} ${formatDate(alert.validUntil!)}',
+                            '${loc.validUntil} ${AlertUtils.formatDate(alert.validUntil!)}',
                             style: const TextStyle(color: Colors.white70),
                           ),
                       ],

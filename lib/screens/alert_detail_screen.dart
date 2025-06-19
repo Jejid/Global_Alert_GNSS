@@ -9,8 +9,8 @@ class AlertDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = getIconLucid(alert.type);
-    final color = getAlertColor(alert.type);
+    final icon = AlertUtils.getIconLucid(alert.type);
+    final color = AlertUtils.getAlertColor(alert.type);
 
     Text buildFieldTitle(String text) => Text(
       text,
@@ -64,7 +64,7 @@ class AlertDetailScreen extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 buildFieldTitle("Fecha de emisión:"),
-                buildFieldContent(formatDate(alert.timestamp)),
+                buildFieldContent(AlertUtils.formatDate(alert.timestamp)),
                 const SizedBox(height: 16),
 
                 if (alert.regions != null && alert.regions!.isNotEmpty) ...[
@@ -85,7 +85,7 @@ class AlertDetailScreen extends StatelessWidget {
 
                 if (alert.validUntil != null) ...[
                   buildFieldTitle("Válido hasta:"),
-                  buildFieldContent(formatDate(alert.validUntil!)),
+                  buildFieldContent(AlertUtils.formatDate(alert.validUntil!)),
                   const SizedBox(height: 16),
                 ],
 

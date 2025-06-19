@@ -133,6 +133,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Error loading alerts'**
   String get loadingError;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Global Alert GNSS'**
+  String get appTitle;
+
+  /// No description provided for @recentAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Alerts'**
+  String get recentAlerts;
+
+  /// No description provided for @noRecentAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'No Recent Alerts'**
+  String get noRecentAlerts;
+
+  /// No description provided for @alertMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert Map'**
+  String get alertMap;
+
+  /// No description provided for @viewHistory.
+  ///
+  /// In en, this message translates to:
+  /// **'View History'**
+  String get viewHistory;
 }
 
 class _AppLocalizationsDelegate

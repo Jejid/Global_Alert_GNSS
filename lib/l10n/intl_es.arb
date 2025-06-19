@@ -5,5 +5,10 @@
   "validUntil": "Válido hasta:",
   "region": "Región:",
   "regions": "Regiones:",
-  "loadingError": "Error al cargar alertas"
+  "loadingError": "Error al cargar alertas",
+  "appTitle": "Alertas Globales GNSS",
+  "recentAlerts": "Alertas Recientes",
+  "noRecentAlerts": "No hay alertas recientes",
+  "alertMap": "Mapa de Alertas",
+  "viewHistory": "Ver Historial"
 }
