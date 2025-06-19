@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:global_alert_gnss/models/alert_message_model.dart';
-import 'package:global_alert_gnss/services/alert_service.dart';
-import 'package:global_alert_gnss/screens/alert_detail_screen.dart';
-import 'package:global_alert_gnss/utils/alert_utils.dart';
+import '../models/alert_message_model.dart';
+import '../services/alert_service.dart';
+import '../utils/alert_utils.dart';
+import '../screens/alert_detail_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class AlertsListScreen extends StatelessWidget {
   const AlertsListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          Localizations.localeOf(context).languageCode == 'es' ? 'Alertas' : 'Alerts',
-        ),
+        title: Text(loc.alertsTitle),
         backgroundColor: Colors.deepPurple,
       ),
       body: FutureBuilder<List<AlertMessage>>(
@@ -23,7 +24,7 @@ class AlertsListScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar alertas'));
+            return Center(child: Text(loc.loadingError));
           }
 
           final alerts = snapshot.data!;
@@ -76,13 +77,13 @@ class AlertsListScreen extends StatelessWidget {
                         if (alert.regions != null && alert.regions!.isNotEmpty)
                           Text(
                             alert.regions!.length > 1
-                                ? 'Regiones: ${alert.regions!.join(", ")}'
-                                : 'Región: ${alert.regions!.first}',
+                                ? '${loc.regions} ${alert.regions!.join(", ")}'
+                                : '${loc.region} ${alert.regions!.first}',
                             style: const TextStyle(color: Colors.white70),
                           ),
                         if (alert.validUntil != null)
                           Text(
-                            'Válido hasta: ${formatDate(alert.validUntil!)}',
+                            '${loc.validUntil} ${formatDate(alert.validUntil!)}',
                             style: const TextStyle(color: Colors.white70),
                           ),
                       ],

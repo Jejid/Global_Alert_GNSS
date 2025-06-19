@@ -1,0 +1,9 @@
+{
+  "@@locale": "es",
+  "alertsTitle": "Alertas",
+  "viewAlerts": "Ver Alertas",
+  "validUntil": "Válido hasta:",
+  "region": "Región:",
+  "regions": "Regiones:",
+  "loadingError": "Error al cargar alertas"
+}

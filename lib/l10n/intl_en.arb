@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "alertsTitle": "Alerts",
+  "viewAlerts": "View Alerts",
+  "validUntil": "Valid until:",
+  "region": "Region:",
+  "regions": "Regions:",
+  "loadingError": "Error loading alerts"
+}
+
