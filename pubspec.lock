@@ -81,7 +81,7 @@ packages:
     source: sdk
     version: "0.0.0"
   intl:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: intl
       sha256: "3df61194eb431efc39c4ceba583b95633a403f46c9fd341e550ce0bfa50e9aa5"
@@ -121,7 +121,7 @@ packages:
     source: hosted
     version: "5.1.1"
   lucide_icons:
-    dependency: "direct dev"
+    dependency: "direct main"
     description:
       name: lucide_icons
       sha256: ad24d0fd65707e48add30bebada7d90bff2a1bba0a72d6e9b19d44246b0e83c4

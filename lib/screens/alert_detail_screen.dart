@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:global_alert_gnss/models/alert_message.dart';
+import 'package:global_alert_gnss/models/alert_message_model.dart';
 import '../utils/alert_utils.dart';
 
 class AlertDetailScreen extends StatelessWidget {

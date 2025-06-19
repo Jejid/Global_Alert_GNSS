@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/services.dart';
-import '../models/alert_message.dart';
+import '../models/alert_message_model.dart';
 
 class AlertService {
   /// Carga y parsea el JSON completo de `assets/alerts.json`
