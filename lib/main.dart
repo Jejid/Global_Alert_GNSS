@@ -1,11 +1,27 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
 
-void main() {
-  runApp(const GlobalAlertGNSSApp());
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:intl/intl.dart';
+import 'package:intl/date_symbol_data_local.dart';
+
+import 'models/alert_message.dart';
+import 'services/alert_service.dart';
+import 'screens/alert_detail_screen.dart';
+import 'utils/alert_utils.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final systemLocale = PlatformDispatcher.instance.locale.languageCode;
+
+  await initializeDateFormatting(systemLocale, null);
+  Intl.defaultLocale = systemLocale;
+
+  runApp(const GlobalAlertApp());
 }
 
-class GlobalAlertGNSSApp extends StatelessWidget {
-  const GlobalAlertGNSSApp({super.key});
+class GlobalAlertApp extends StatelessWidget {
+  const GlobalAlertApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,46 +29,116 @@ class GlobalAlertGNSSApp extends StatelessWidget {
       title: 'Global Alert GNSS',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        primaryColor: Colors.deepOrange,
-        scaffoldBackgroundColor: Colors.black,
+        primaryColor: Colors.deepPurple,
+        scaffoldBackgroundColor: Colors.black54,
       ),
-      home: const HomeScreen(),
+      supportedLocales: const [
+        Locale('en'),
+        Locale('es'),
+      ],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      home: AlertsListScreen(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
+class AlertsListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Global Alert GNSS'),
-        backgroundColor: Colors.red[700],
+        title: const Text('Alertas GNSS'),
+        backgroundColor: Colors.deepPurple,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: const [
-            Icon(Icons.warning_amber_rounded, size: 100, color: Colors.red),
-            SizedBox(height: 25),
-            Text(
-              '🚨 ALERTA: SISMO INMINENTE',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Evacúa al norte 2 km. Refugio seguro en la zona alta.',
-              style: TextStyle(fontSize: 18),
-              textAlign: TextAlign.center,
-            ),
-          ],
-        ),
+      body: FutureBuilder<List<AlertMessage>>(
+        future: AlertService.loadAlerts(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            debugPrint('Error en snapshot: ${snapshot.error}');
+            debugPrint('StackTrace: ${snapshot.stackTrace}');
+            return const Center(child: Text('Error al cargar alertas'));
+          }
+
+          final alerts = snapshot.data!;
+          return ListView.builder(
+            padding: const EdgeInsets.all(12),
+            itemCount: alerts.length,
+            itemBuilder: (context, i) {
+              final alert = alerts[i];
+              return InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AlertDetailScreen(alert: alert),
+                    ),
+                  );
+                },
+                child: Card(
+                  color: getAlertColor(alert.type),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  elevation: 6,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              getAlertIcon(alert.type),
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                            const SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                alert.title,
+                                style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          alert.message,
+                          style: const TextStyle(fontSize: 16, color: Colors.white),
+                        ),
+                        const SizedBox(height: 12),
+                        if (alert.regions != null && alert.regions!.isNotEmpty)
+                          if(alert.regions!.length > 1)
+                            Text(
+                            'Region(es): ${alert.regions!.join(', ')}',
+                            style: const TextStyle(color: Colors.white70),
+                          )else Text(
+                              'Region: ${alert.regions!.join("")}',
+                              style: const TextStyle(color: Colors.white70)) ,
+                        if (alert.validUntil != null)
+                          Text(
+                            'Válido hasta: ${formatDate(alert.validUntil!)}',
+                            style: const TextStyle(color: Colors.white70),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
       ),
     );
   }
 }
-
