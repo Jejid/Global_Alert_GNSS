@@ -38,7 +38,11 @@ class AlertMessage {
       target: json['target'],
       timestamp: DateTime.parse(json['timestamp']),
       message: json['message'] ?? '',
-      regions: json['regions'] != null ? List<String>.from(json['regions']) : null,
+      regions: json['regions'] != null
+          ? (json['regions'] is String
+            ? (json['regions'] as String).split(',').map((e) => e.trim()).toList()
+            : List<String>.from(json['regions']))
+          : null,
       locations: json['locations'] != null
           ? List<Location>.from(json['locations'].map((loc) => Location.fromJson(loc)))
           : null,

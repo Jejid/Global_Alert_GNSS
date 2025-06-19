@@ -61,8 +61,8 @@ class AlertsListScreen extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            //debugPrint('Error en snapshot: ${snapshot.error}');
-            //debugPrint('StackTrace: ${snapshot.stackTrace}');
+            debugPrint('Error en snapshot: ${snapshot.error}');
+            debugPrint('StackTrace: ${snapshot.stackTrace}');
             return const Center(child: Text('Error al cargar alertas'));
           }
 
@@ -117,14 +117,14 @@ class AlertsListScreen extends StatelessWidget {
                           style: const TextStyle(fontSize: 16, color: Colors.white),
                         ),
                         const SizedBox(height: 12),
-                        if (alert.locations != null)
-                          Text(
-                            'Coordenadas: ' +
-                                alert.locations!
-                                    .map((loc) => '${loc.lat.toStringAsFixed(3)}, ${loc.lon.toStringAsFixed(3)}')
-                                    .join(' | '),
+                        if (alert.regions != null && alert.regions!.isNotEmpty)
+                          if(alert.regions!.length > 1)
+                            Text(
+                            'Region(es): ${alert.regions!.join(', ')}',
                             style: const TextStyle(color: Colors.white70),
-                          ),
+                          )else Text(
+                              'Region: ${alert.regions!.join("")}',
+                              style: const TextStyle(color: Colors.white70)) ,
                         if (alert.validUntil != null)
                           Text(
                             'Válido hasta: ${formatDate(alert.validUntil!)}',
