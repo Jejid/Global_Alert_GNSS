@@ -10,5 +10,6 @@
   "recentAlerts": "Alertas Recientes",
   "noRecentAlerts": "No hay alertas recientes",
   "alertMap": "Mapa de Alertas",
-  "viewHistory": "Ver todas las Alertas"
+  "viewHistory": "Ver todas las Alertas",
+  "filterByType": "Filtrar por tipo de Alerta"
 }

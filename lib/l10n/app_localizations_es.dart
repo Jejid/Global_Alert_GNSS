@@ -40,4 +40,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get viewHistory => 'Ver todas las Alertas';
+
+  @override
+  String get filterByType => 'Filtrar por tipo de Alerta';
 }

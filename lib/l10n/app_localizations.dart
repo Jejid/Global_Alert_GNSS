@@ -163,6 +163,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'View All Alerts History'**
   String get viewHistory;
+
+  /// No description provided for @filterByType.
+  ///
+  /// In en, this message translates to:
+  /// **'Filter Alert by type'**
+  String get filterByType;
 }
 
 class _AppLocalizationsDelegate

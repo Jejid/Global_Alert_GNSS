@@ -5,95 +5,107 @@ import '../utils/alert_utils.dart';
 import '../screens/alert_detail_screen.dart';
 import '../l10n/app_localizations.dart';
 
-class AlertsListScreen extends StatelessWidget {
+class AlertsListScreen extends StatefulWidget {
   const AlertsListScreen({super.key});
+
+  @override
+  State<AlertsListScreen> createState() => _AlertsListScreenState();
+}
+
+class _AlertsListScreenState extends State<AlertsListScreen> {
+  List<AlertMessage> _alerts = [];
+  String? _selectedType;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadAlerts();
+  }
+
+  Future<void> _loadAlerts() async {
+    final alerts = await AlertService.loadAlerts();
+    setState(() {
+      _alerts = alerts;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final types = _alerts.map((a) => a.type).toSet().toList();
+
+    final filteredAlerts = _selectedType == null
+        ? _alerts
+        : _alerts.where((a) => a.type == _selectedType).toList();
 
     return Scaffold(
       appBar: AppBar(
         title: Text(loc.alertsTitle),
         backgroundColor: Colors.deepPurple,
       ),
-      body: FutureBuilder<List<AlertMessage>>(
-        future: AlertService.loadAlerts(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (snapshot.hasError) {
-            return Center(child: Text(loc.loadingError));
-          }
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: DropdownButtonFormField<String>(
+              value: _selectedType,
+              hint: Text(loc.filterByType, style: TextStyle(color: Colors.black)),
+              items: types.map((type) {
+                return DropdownMenuItem(
+                  value: type,
+                  child: Text(type),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  _selectedType = value;
+                });
+              },
+              isExpanded: true,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                filled: true,
+                fillColor: Colors.grey[100],
+              ),
+            ),
+          ),
+          Expanded(
+            child: filteredAlerts.isEmpty
+                ? Center(child: Text(loc.noRecentAlerts))
+                : ListView.builder(
+              padding: const EdgeInsets.all(12),
+              itemCount: filteredAlerts.length,
+              itemBuilder: (context, i) {
+                final alert = filteredAlerts[i];
+                final color = AlertUtils.getAlertColor(alert.type);
+                final icon = AlertUtils.getIconLucid(alert.type);
 
-          final alerts = snapshot.data!;
-          return ListView.builder(
-            padding: const EdgeInsets.all(12),
-            itemCount: alerts.length,
-            itemBuilder: (context, i) {
-              final alert = alerts[i];
-              return InkWell(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => AlertDetailScreen(alert: alert),
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 6),
+                  color: color.withOpacity(0.1),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  child: ListTile(
+                    leading: Icon(icon, color: color),
+                    title: Text(alert.title, style: const TextStyle(fontSize: 16)),
+                    subtitle: Text(
+                      alert.regions?.join(', ') ?? '',
+                      style: const TextStyle(color: Colors.grey),
                     ),
-                  );
-                },
-                child: Card(
-                  color: AlertUtils.getAlertColor(alert.type),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  elevation: 6,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(AlertUtils.getAlertIcon(alert.type), color: Colors.white, size: 28),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                alert.title,
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
-                          ],
+                    trailing: Text(AlertUtils.formatTimestamp(alert.timestamp)),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => AlertDetailScreen(alert: alert),
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          alert.message,
-                          style: const TextStyle(fontSize: 16, color: Colors.white),
-                        ),
-                        const SizedBox(height: 12),
-                        if (alert.regions != null && alert.regions!.isNotEmpty)
-                          Text(
-                            alert.regions!.length > 1
-                                ? '${loc.regions} ${alert.regions!.join(", ")}'
-                                : '${loc.region} ${alert.regions!.first}',
-                            style: const TextStyle(color: Colors.white70),
-                          ),
-                        if (alert.validUntil != null)
-                          Text(
-                            '${loc.validUntil} ${AlertUtils.formatDate(alert.validUntil!)}',
-                            style: const TextStyle(color: Colors.white70),
-                          ),
-                      ],
-                    ),
+                      );
+                    },
                   ),
-                ),
-              );
-            },
-          );
-        },
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
