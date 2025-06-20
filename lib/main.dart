@@ -6,13 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
+
 
 import 'screens/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final systemLocale = PlatformDispatcher.instance.locale.languageCode;
-
   await initializeDateFormatting(systemLocale, null);
   Intl.defaultLocale = systemLocale;
 

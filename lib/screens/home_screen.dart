@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'alert_detail_screen.dart';
-import 'alerts_list_screen.dart';
-import 'map_screen.dart';
-import '../l10n/app_localizations.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import '../utils/alert_utils.dart';
 import '../models/alert_message_model.dart';
+import 'alert_detail_screen.dart';
+import 'alerts_list_screen.dart';
+import 'map_screen_new.dart';
+import '../l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen>
   late final Animation<double> _fadeIn;
 
   List<AlertMessage> _recentAlerts = [];
-  Set<Marker> _markers = {};
+  List<Marker> _markers = [];
 
   @override
   void initState() {
@@ -46,12 +47,14 @@ class _HomeScreenState extends State<HomeScreen>
     final now = DateTime.now();
     final allAlerts = await AlertUtils.getAllAlerts();
 
-    setState(() {
-      _recentAlerts = allAlerts.where((a) {
-        final diff = now.difference(a.timestamp);
-        return diff.inDays <= 3;
-      }).toList();
-    });
+    if (mounted) {
+      setState(() {
+        _recentAlerts = allAlerts.where((a) {
+          final diff = now.difference(a.timestamp);
+          return diff.inDays <= 3;
+        }).toList();
+      });
+    }
   }
 
   Future<void> _loadMarkers() async {
@@ -65,27 +68,31 @@ class _HomeScreenState extends State<HomeScreen>
           a.locations!.isNotEmpty;
     }).toList();
 
-    final Set<Marker> markers = {};
+    final List<Marker> markers = [];
 
     for (final alert in recentAlerts) {
-      final hue = AlertUtils.getHue_forType(alert.type);
-      final icon = BitmapDescriptor.defaultMarkerWithHue(hue);
+      final color = AlertUtils.getAlertColor(alert.type);
       for (final loc in alert.locations!) {
-        markers.add(Marker(
-          markerId: MarkerId('${alert.id}_${loc.lat}_${loc.lon}'),
-          position: LatLng(loc.lat, loc.lon),
-          icon: icon,
-          infoWindow: InfoWindow(
-            title: alert.title,
-            snippet: alert.message,
+        markers.add(
+          Marker(
+            point: LatLng(loc.lat, loc.lon),
+            width: 40,
+            height: 40,
+            child: Icon(
+              Icons.location_on,
+              color: color,
+              size: 32,
+            ),
           ),
-        ));
+        );
       }
     }
 
-    setState(() {
-      _markers = markers;
-    });
+    if (mounted) {
+      setState(() {
+        _markers = markers;
+      });
+    }
   }
 
   @override
@@ -117,7 +124,6 @@ class _HomeScreenState extends State<HomeScreen>
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              // —————————————————— Alertas Recientes
               Text(loc.recentAlerts, style: sectionTitleStyle),
               const SizedBox(height: 12),
               if (_recentAlerts.isEmpty)
@@ -127,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen>
                 final icon = AlertUtils.getIconLucid(alert.type);
                 return Card(
                   margin: const EdgeInsets.symmetric(vertical: 6),
-                  color: color.withValues(alpha: 0.1),
+                  color: color.withOpacity(0.1),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   child: ListTile(
@@ -156,42 +162,35 @@ class _HomeScreenState extends State<HomeScreen>
               const Divider(thickness: 1.2),
               const SizedBox(height: 24),
 
-              // —————————————————— Mapa de Alertas
               Text(loc.alertMap, style: sectionTitleStyle),
               const SizedBox(height: 12),
-              SizedBox(
-                height: 200,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Stack(
-                    children: [
-                      GoogleMap(
-                        initialCameraPosition: const CameraPosition(
-                          target: LatLng(4.236479, -72.708779),
-                          zoom: 5,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const MapScreen()),
+                  );
+                },
+                child: SizedBox(
+                  height: 200,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: AbsorbPointer(
+                      child: FlutterMap(
+                        options: MapOptions(
+                          center: LatLng(4.236479, -72.708779),
+                          zoom: 2.5,
+                          interactiveFlags: InteractiveFlag.none,
                         ),
-                        markers: _markers,
-                        zoomControlsEnabled: false,
-                        liteModeEnabled: false,
-                      ),
-                      Positioned.fill(
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const MapScreen()),
-                              );
-                            },
-                            splashColor:
-                            primaryColor.withValues(alpha: 0.15),
-                            highlightColor: Colors.transparent,
+                        children: [
+                          TileLayer(
+                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.app',
                           ),
-                        ),
+                          MarkerLayer(markers: _markers),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -200,26 +199,24 @@ class _HomeScreenState extends State<HomeScreen>
               const Divider(thickness: 1.2),
               const SizedBox(height: 24),
 
-              // —————————————————— Ver Historial
               Text(loc.viewHistory, style: sectionTitleStyle),
               const SizedBox(height: 16),
               ElevatedButton.icon(
-                icon: const Icon(Icons.history,
-                    color: Colors.blueGrey),
-                label: Text( loc.viewHistory,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.blueGrey),),
+                icon: const Icon(Icons.history, color: Colors.blueGrey),
+                label: Text(
+                  loc.viewHistory,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(color: Colors.blueGrey),
+                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12)),
                 ),
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (_) => const AlertsListScreen()),
+                    MaterialPageRoute(builder: (_) => const AlertsListScreen()),
                   );
                 },
               ),
@@ -231,4 +228,3 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 }
-
