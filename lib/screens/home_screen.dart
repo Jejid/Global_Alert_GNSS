@@ -5,7 +5,7 @@ import '../utils/alert_utils.dart';
 import '../models/alert_message_model.dart';
 import 'alert_detail_screen.dart';
 import 'alerts_list_screen.dart';
-import 'map_screen_new.dart';
+import 'map_screen.dart';
 import '../l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +21,8 @@ class _HomeScreenState extends State<HomeScreen>
   late final Animation<double> _fadeIn;
 
   List<AlertMessage> _recentAlerts = [];
-  List<Marker> _markers = [];
+  List<AlertMessage> _monthlyAlerts = [];
+  List<Marker> _recentMarkers = [];
 
   @override
   void initState() {
@@ -39,58 +40,49 @@ class _HomeScreenState extends State<HomeScreen>
 
     _animController.forward();
 
-    _loadRecentAlerts();
-    _loadMarkers();
+    _loadAlerts();
   }
 
-  Future<void> _loadRecentAlerts() async {
+  Future<void> _loadAlerts() async {
     final now = DateTime.now();
-    final allAlerts = await AlertUtils.getAllAlerts();
-
-    if (mounted) {
-      setState(() {
-        _recentAlerts = allAlerts.where((a) {
-          final diff = now.difference(a.timestamp);
-          return diff.inDays <= 3;
-        }).toList();
-      });
-    }
-  }
-
-  Future<void> _loadMarkers() async {
-    final now = DateTime.now();
+    final threeDaysAgo = now.subtract(const Duration(days: 3));
     final thirtyDaysAgo = now.subtract(const Duration(days: 30));
     final allAlerts = await AlertUtils.getAllAlerts();
 
-    final recentAlerts = allAlerts.where((a) {
-      return a.timestamp.isAfter(thirtyDaysAgo) &&
-          a.locations != null &&
-          a.locations!.isNotEmpty;
-    }).toList();
+    final recentAlerts = <AlertMessage>[];
+    final monthAlerts = <AlertMessage>[];
+    final recentMarkers = <Marker>[];
 
-    final List<Marker> markers = [];
+    for (final alert in allAlerts) {
+      if (alert.timestamp.isAfter(thirtyDaysAgo) && alert.locations != null && alert.locations!.isNotEmpty) {
+        monthAlerts.add(alert);
 
-    for (final alert in recentAlerts) {
-      final color = AlertUtils.getAlertColor(alert.type);
-      for (final loc in alert.locations!) {
-        markers.add(
-          Marker(
-            point: LatLng(loc.lat, loc.lon),
-            width: 40,
-            height: 40,
-            child: Icon(
-              Icons.location_on,
-              color: color,
-              size: 32,
-            ),
-          ),
-        );
+        if (alert.timestamp.isAfter(threeDaysAgo)) {
+          recentAlerts.add(alert);
+          final color = AlertUtils.getAlertColor(alert.type);
+          for (final loc in alert.locations!) {
+            recentMarkers.add(
+              Marker(
+                point: LatLng(loc.lat, loc.lon),
+                width: 40,
+                height: 40,
+                child: Icon(
+                  Icons.location_on,
+                  color: color,
+                  size: 32,
+                ),
+              ),
+            );
+          }
+        }
       }
     }
 
     if (mounted) {
       setState(() {
-        _markers = markers;
+        _recentAlerts = recentAlerts;
+        _monthlyAlerts = monthAlerts;
+        _recentMarkers = recentMarkers;
       });
     }
   }
@@ -105,7 +97,6 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
     const primaryColor = Colors.deepPurple;
-    const accentColor = Colors.cyan;
 
     final sectionTitleStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
       fontWeight: FontWeight.bold,
@@ -164,22 +155,16 @@ class _HomeScreenState extends State<HomeScreen>
 
               Text(loc.alertMap, style: sectionTitleStyle),
               const SizedBox(height: 12),
-              GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const MapScreen()),
-                  );
-                },
-                child: SizedBox(
-                  height: 200,
-                  child: ClipRRect(
+              Stack(
+                children: [
+                  ClipRRect(
                     borderRadius: BorderRadius.circular(12),
-                    child: AbsorbPointer(
+                    child: SizedBox(
+                      height: 200,
                       child: FlutterMap(
                         options: MapOptions(
                           center: LatLng(4.236479, -72.708779),
-                          zoom: 2.5,
+                          zoom: 1.5,
                           interactiveFlags: InteractiveFlag.none,
                         ),
                         children: [
@@ -187,12 +172,28 @@ class _HomeScreenState extends State<HomeScreen>
                             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             userAgentPackageName: 'com.example.app',
                           ),
-                          MarkerLayer(markers: _markers),
+                          MarkerLayer(markers: _recentMarkers),
                         ],
                       ),
                     ),
                   ),
-                ),
+                  Positioned.fill(
+                    child: Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => MapScreen(alerts: _monthlyAlerts),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
 
               const SizedBox(height: 24),

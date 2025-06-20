@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/models/alert_message_model.dart';
 import '../utils/alert_utils.dart';
+import 'map_screen.dart';
 
 class AlertDetailScreen extends StatelessWidget {
   final AlertMessage alert;
@@ -40,7 +41,6 @@ class AlertDetailScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Encabezado con ícono y tipo
                 Row(
                   children: [
                     Icon(icon, size: 32, color: color),
@@ -58,7 +58,6 @@ class AlertDetailScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 const Divider(),
 
-                // Mensaje principal
                 buildFieldTitle("Mensaje:"),
                 buildFieldContent(alert.message),
                 const SizedBox(height: 16),
@@ -93,8 +92,11 @@ class AlertDetailScreen extends StatelessWidget {
                 Center(
                   child: ElevatedButton.icon(
                     onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Función de mapa no disponible aún")),
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => MapScreen(alerts: [alert]),
+                        ),
                       );
                     },
                     icon: const Icon(Icons.map_outlined),

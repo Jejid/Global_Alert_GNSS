@@ -39,5 +39,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alertMap => 'Alert Map';
 
   @override
-  String get viewHistory => 'View History';
+  String get viewHistory => 'View All Alerts History';
 }

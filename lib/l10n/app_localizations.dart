@@ -161,7 +161,7 @@ abstract class AppLocalizations {
   /// No description provided for @viewHistory.
   ///
   /// In en, this message translates to:
-  /// **'View History'**
+  /// **'View All Alerts History'**
   String get viewHistory;
 }
 
