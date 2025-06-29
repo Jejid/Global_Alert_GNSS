@@ -105,6 +105,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       color: textColor,
     );
 
+    final loc = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: backgroundColor,
       body: SafeArea(
@@ -126,7 +128,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           children: [
                             const Spacer(),
                             Text(
-                              'Alerts',
+                              loc.alertsTitle,
                               style: const TextStyle(
                                 color: textColor,
                                 fontSize: 20,
@@ -152,7 +154,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Latest Alerts',
+                            loc.recentAlerts,
                             style: sectionTitleStyle?.copyWith(fontSize: 22),
                           ),
                         ),
@@ -163,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           child: Text(
-                            'No recent alerts',
+                            loc.noRecentAlerts,
                             style: TextStyle(color: secondaryTextColor),
                           ),
                         )
@@ -244,7 +246,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Map',
+                            loc.alertMap,
                             style: sectionTitleStyle?.copyWith(fontSize: 22),
                           ),
                         ),
@@ -303,7 +305,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 children: [
                   _buildFooterButton(
                     icon: Icons.home,
-                    label: 'Home',
+                    label: loc.home,
                     isActive: true,
                     onTap: () {
                       // Ya estamos en Alerts
@@ -311,7 +313,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   _buildFooterButton(
                     icon: Icons.map_outlined,
-                    label: 'Map',
+                    label: loc.alertMap,
                     isActive: false,
                     onTap: () {
                       Navigator.push(
@@ -322,7 +324,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   _buildFooterButton(
                     icon: Icons.history,
-                    label: 'Alerts',
+                    label: loc.history,
                     isActive: false,
                     onTap: () {
                       Navigator.push(
@@ -333,7 +335,8 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   _buildFooterButton(
                     icon: Icons.settings,
-                    label: 'Settings',
+                    label: loc.appTitle,
+                    // No tienes "Settings" en el arb, usa appTitle o agrega uno nuevo
                     isActive: false,
                     onTap: () {
                       // Acción configuración

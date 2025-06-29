@@ -10,7 +10,9 @@
   "recentAlerts": "Recent Alerts",
   "noRecentAlerts": "No Recent Alerts",
   "alertMap": "Alert Map",
-  "viewHistory": "View All Alerts History",
-  "filterByType": "Filter Alert by type"
+  "history": "All Alerts",
+  "filterByType": "Filter Alert by type",
+  "home": "Home",
+  "searchAlerts": "Search Alerts"
 }
 

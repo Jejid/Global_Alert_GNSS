@@ -158,17 +158,29 @@ abstract class AppLocalizations {
   /// **'Alert Map'**
   String get alertMap;
 
-  /// No description provided for @viewHistory.
+  /// No description provided for @history.
   ///
   /// In en, this message translates to:
-  /// **'View All Alerts History'**
-  String get viewHistory;
+  /// **'All Alerts'**
+  String get history;
 
   /// No description provided for @filterByType.
   ///
   /// In en, this message translates to:
   /// **'Filter Alert by type'**
   String get filterByType;
+
+  /// No description provided for @home.
+  ///
+  /// In en, this message translates to:
+  /// **'Home'**
+  String get home;
+
+  /// No description provided for @searchAlerts.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Alerts'**
+  String get searchAlerts;
 }
 
 class _AppLocalizationsDelegate

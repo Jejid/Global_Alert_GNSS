@@ -39,8 +39,14 @@ class AppLocalizationsEs extends AppLocalizations {
   String get alertMap => 'Mapa de Alertas';
 
   @override
-  String get viewHistory => 'Ver todas las Alertas';
+  String get history => 'Alertas';
 
   @override
   String get filterByType => 'Filtrar por tipo de Alerta';
+
+  @override
+  String get home => 'Principal';
+
+  @override
+  String get searchAlerts => 'Buscar Alertas';
 }
