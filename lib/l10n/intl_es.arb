@@ -4,7 +4,7 @@
   "viewAlerts": "Ver Alertas",
   "validUntil": "Válido hasta:",
   "region": "Región:",
-  "regions": "Regiones:",
+  "regions": "Region(es):",
   "loadingError": "Error al cargar alertas",
   "appTitle": "Alertas Globales GNSS",
   "recentAlerts": "Alertas Recientes",
@@ -13,5 +13,11 @@
   "history": "Alertas",
   "filterByType": "Filtrar por tipo de Alerta",
   "home": "Principal",
-  "searchAlerts": "Buscar Alertas"
+  "searchAlerts": "Buscar Alertas",
+  "alertPriority": "Prioridad",
+  "lookInMap": "Ver en Mapa",
+  "message": "Mensaje",
+  "alertInformation": "Información de Alerta",
+  "timestamp": "Fecha de envío",
+  "source": "Fuente"
 }

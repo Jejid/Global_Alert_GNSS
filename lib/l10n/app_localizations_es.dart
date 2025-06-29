@@ -49,4 +49,22 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get searchAlerts => 'Buscar Alertas';
+
+  @override
+  String get alertPriority => 'Prioridad';
+
+  @override
+  String get lookInMap => 'Ver en Mapa';
+
+  @override
+  String get message => 'Mensaje';
+
+  @override
+  String get alertInformation => 'Información de Alerta';
+
+  @override
+  String get timestamp => 'Fecha de envío';
+
+  @override
+  String get source => 'Fuente';
 }

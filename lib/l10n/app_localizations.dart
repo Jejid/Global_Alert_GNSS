@@ -181,6 +181,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Search Alerts'**
   String get searchAlerts;
+
+  /// No description provided for @alertPriority.
+  ///
+  /// In en, this message translates to:
+  /// **'Priority'**
+  String get alertPriority;
+
+  /// No description provided for @lookInMap.
+  ///
+  /// In en, this message translates to:
+  /// **'Look in Map'**
+  String get lookInMap;
+
+  /// No description provided for @message.
+  ///
+  /// In en, this message translates to:
+  /// **'Message'**
+  String get message;
+
+  /// No description provided for @alertInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'Alert Information'**
+  String get alertInformation;
+
+  /// No description provided for @timestamp.
+  ///
+  /// In en, this message translates to:
+  /// **'Timestamp'**
+  String get timestamp;
+
+  /// No description provided for @source.
+  ///
+  /// In en, this message translates to:
+  /// **'Source'**
+  String get source;
 }
 
 class _AppLocalizationsDelegate
