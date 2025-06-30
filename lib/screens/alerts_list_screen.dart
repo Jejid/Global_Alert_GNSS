@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/alert_message_model.dart';
 import '../services/alert_service.dart';
 import '../utils/alert_utils.dart';
-import '../screens/alert_detail_screen.dart';
+import 'alert_detail_screen.dart';
 import '../l10n/app_localizations.dart';
 import 'map_screen.dart';
 
@@ -35,25 +35,24 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
   void _onSearchChanged(String query) {
     setState(() {
       _searchQuery = query.trim().toLowerCase();
-      if (_searchQuery.isEmpty) {
-        _filteredAlerts = _alerts;
-      } else {
-        _filteredAlerts = _alerts.where((alert) {
-          final titleLower = alert.title.toLowerCase();
-          final regionsLower = alert.regions?.join(', ').toLowerCase() ?? '';
-          return titleLower.contains(_searchQuery) || regionsLower.contains(_searchQuery);
-        }).toList();
-      }
+      _filteredAlerts = _searchQuery.isEmpty
+          ? _alerts
+          : _alerts.where((alert) {
+        final title = alert.title.toLowerCase();
+        final regions = alert.regions?.join(', ').toLowerCase() ?? '';
+        return title.contains(_searchQuery) || regions.contains(_searchQuery);
+      }).toList();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    const backgroundColor = Color(0xFF101323);
-    const inputBackgroundColor = Color(0xFF21284a);
-    const footerBackgroundColor = Color(0xFF181d35);
+    const backgroundColor = Color(0xFF0E0F14);
+    const cardColor = Color(0xFF1A1C24);
+    const inputBackgroundColor = Color(0xFF1E2233);
+    const footerColor = Color(0xFF14161F);
     const textColor = Colors.white;
-    const secondaryTextColor = Color(0xFF8e99cc);
+    const secondaryText = Color(0xFF9ba1bb);
 
     final loc = AppLocalizations.of(context)!;
 
@@ -63,73 +62,61 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
         child: Column(
           children: [
             // Header
-            Container(
-              color: backgroundColor,
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 16, 20, 4),
               child: Row(
                 children: [
-                  // Icon "List"
-                  Container(
-                    width: 36,
-                    height: 36,
-                    alignment: Alignment.center,
-                    child: Icon(
-                      Icons.list,
-                      color: textColor,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
+                  const Icon(Icons.list_rounded, color: textColor, size: 28),
+                  const SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       loc.alertsTitle,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         color: textColor,
-                        fontSize: 20,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        letterSpacing: -0.015,
                       ),
                     ),
                   ),
-                  // Spacer to balance the row (same width as icon)
-                  const SizedBox(width: 36),
+                  const Opacity(
+                    opacity: 0,
+                    child: Icon(Icons.list_rounded, size: 28),
+                  ), // balance visual
                 ],
               ),
             ),
 
-            // Search input
+            // Search box
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 12),
               child: Container(
-                height: 48,
                 decoration: BoxDecoration(
                   color: inputBackgroundColor,
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: TextField(
                   onChanged: _onSearchChanged,
-                  style: const TextStyle(color: textColor, fontSize: 16),
-                  cursorColor: textColor,
+                  style: const TextStyle(color: textColor),
+                  cursorColor: Colors.white,
                   decoration: InputDecoration(
                     hintText: loc.searchAlerts,
-                    // Asegúrate que exista en arb
-                    hintStyle: TextStyle(color: secondaryTextColor),
+                    hintStyle: const TextStyle(color: secondaryText),
                     border: InputBorder.none,
-                    prefixIcon: Icon(Icons.search, color: secondaryTextColor),
+                    prefixIcon: const Icon(Icons.search, color: secondaryText),
                     contentPadding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                 ),
               ),
             ),
 
-            // Alerts list
+            // List or empty state
             Expanded(
               child: _filteredAlerts.isEmpty
                   ? Center(
                 child: Text(
                   loc.noRecentAlerts,
-                  style: TextStyle(color: secondaryTextColor, fontSize: 16),
+                  style: const TextStyle(color: secondaryText, fontSize: 16),
                 ),
               )
                   : ListView.builder(
@@ -150,33 +137,34 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
                       );
                     },
                     child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                      margin: const EdgeInsets.only(bottom: 12),
+                      padding: const EdgeInsets.all(14),
                       decoration: BoxDecoration(
-                        color: inputBackgroundColor,
-                        borderRadius: BorderRadius.circular(8),
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 6,
+                            offset: const Offset(0, 3),
+                          )
+                        ],
                       ),
                       child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          // Icon container con color de alerta y icono blanco
                           Container(
-                            width: 40,
-                            height: 40,
+                            width: 44,
+                            height: 44,
                             decoration: BoxDecoration(
                               color: color,
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            alignment: Alignment.center,
                             child: Icon(icon, color: Colors.white, size: 24),
                           ),
-                          const SizedBox(width: 12),
-                          // Textos
+                          const SizedBox(width: 14),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
                               children: [
                                 Text(
                                   alert.title,
@@ -184,15 +172,15 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
                                     color: textColor,
                                     fontWeight: FontWeight.w600,
                                     fontSize: 16,
-                                    overflow: TextOverflow.ellipsis,
                                   ),
                                   maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                const SizedBox(height: 2),
+                                const SizedBox(height: 4),
                                 Text(
                                   AlertUtils.formatTimestamp(alert.timestamp),
-                                  style: TextStyle(
-                                    color: secondaryTextColor,
+                                  style: const TextStyle(
+                                    color: secondaryText,
                                     fontSize: 12,
                                   ),
                                 ),
@@ -207,47 +195,42 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
               ),
             ),
 
-            // Footer Navigation Bar (igual que HomeScreen)
+            // Footer nav bar
             Container(
-              color: footerBackgroundColor,
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              color: footerColor,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   _buildFooterButton(
-                    icon: Icons.home,
+                    icon: Icons.home_rounded,
                     label: loc.home,
                     isActive: false,
-                    onTap: () {
-                      Navigator.popUntil(context, (route) => route.isFirst);
-                    },
+                    onTap: () => Navigator.popUntil(context, (route) => route.isFirst),
                   ),
                   _buildFooterButton(
-                    icon: Icons.map_outlined,
+                    icon: Icons.map_rounded,
                     label: loc.alertMap,
                     isActive: false,
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) =>
-                            MapScreen(alerts: _alerts)),
+                        MaterialPageRoute(builder: (_) => MapScreen(alerts: _alerts)),
                       );
                     },
                   ),
                   _buildFooterButton(
-                    icon: Icons.history,
+                    icon: Icons.history_rounded,
                     label: loc.history,
                     isActive: true,
-                    onTap: () {
-                      // Ya estamos aquí
-                    },
+                    onTap: () {}, // ya está aquí
                   ),
                   _buildFooterButton(
-                    icon: Icons.settings,
+                    icon: Icons.settings_rounded,
                     label: loc.appTitle,
                     isActive: false,
                     onTap: () {
-                      // Acción configuración
+                      // navegación futura
                     },
                   ),
                 ],
@@ -270,7 +253,6 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
 
     return GestureDetector(
       onTap: onTap,
-      behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -282,7 +264,6 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
               color: isActive ? activeColor : inactiveColor,
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.015,
             ),
           ),
         ],

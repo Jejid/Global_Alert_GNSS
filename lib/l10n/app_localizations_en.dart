@@ -18,10 +18,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get validUntil => 'Valid until:';
 
   @override
-  String get region => 'Region:';
+  String get region => 'Region';
 
   @override
-  String get regions => 'Regions:';
+  String get regions => 'Region(s)';
 
   @override
   String get loadingError => 'Error loading alerts';

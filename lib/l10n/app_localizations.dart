@@ -119,13 +119,13 @@ abstract class AppLocalizations {
   /// No description provided for @region.
   ///
   /// In en, this message translates to:
-  /// **'Region:'**
+  /// **'Region'**
   String get region;
 
   /// No description provided for @regions.
   ///
   /// In en, this message translates to:
-  /// **'Regions:'**
+  /// **'Region(s)'**
   String get regions;
 
   /// No description provided for @loadingError.

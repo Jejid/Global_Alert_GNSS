@@ -13,60 +13,48 @@ class AlertDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = AlertUtils.getIconLucid(alert.type);
     final color = AlertUtils.getAlertColor(alert.type);
-
     final loc = AppLocalizations.of(context)!;
 
-    // Colores del diseño
-    const backgroundColor = Color(0xFF111218);
-    const borderColor = Color(0xFF3a3f55);
+    const backgroundColor = Color(0xFF0E0F14);
+    const cardColor = Color(0xFF1A1C24);
     const textWhite = Colors.white;
     const textGray = Color(0xFF9ba1bb);
-    const buttonBlue = Color(0xFF4264fa);
 
-    TextStyle sectionTitleStyle = const TextStyle(
+    final sectionTitleStyle = const TextStyle(
       color: textWhite,
-      fontSize: 22,
-      fontWeight: FontWeight.bold,
-      height: 1.2,
-      letterSpacing: -0.015,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
     );
 
-    TextStyle labelStyle = const TextStyle(
+    final labelStyle = const TextStyle(
       color: textGray,
       fontSize: 14,
-      fontWeight: FontWeight.normal,
-      height: 1.1,
     );
 
-    TextStyle valueStyle = const TextStyle(
+    final valueStyle = const TextStyle(
       color: textWhite,
       fontSize: 14,
-      fontWeight: FontWeight.normal,
-      height: 1.1,
     );
 
-    TextStyle detailTextStyle = const TextStyle(
+    final detailTextStyle = const TextStyle(
       color: textWhite,
       fontSize: 16,
-      fontWeight: FontWeight.normal,
       height: 1.4,
     );
 
-    Widget buildDetailRow(String label, String value) {
+    Widget buildDetailCard(String label, String value) {
       return Container(
-        decoration: const BoxDecoration(
-          border: Border(
-            top: BorderSide(color: borderColor, width: 1),
-          ),
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white10),
         ),
-        padding: const EdgeInsets.symmetric(vertical: 12),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.2,
-              child: Text(label, style: labelStyle),
-            ),
+            Text('$label: ', style: labelStyle),
             Expanded(child: Text(value, style: valueStyle)),
           ],
         ),
@@ -79,77 +67,63 @@ class AlertDetailScreen extends StatelessWidget {
         backgroundColor: backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: textWhite),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: textWhite),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        // Título dinámico: tipo de alerta en mayúsculas
-        title: Text(
-          alert.type.toUpperCase(),
-          style: const TextStyle(
-            color: textWhite,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            letterSpacing: -0.015,
+        title: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: Text(
+            alert.type.toUpperCase(),
+            key: ValueKey(alert.type),
+            style: const TextStyle(
+              color: textWhite,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
           ),
         ),
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-              // Título centrado con icono y tipo alerta
-            Padding(
-                padding: const EdgeInsets.only(top: 16, bottom: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(icon, size: 32, color: color),
-                      const SizedBox(width: 12),
-                      Text(
-                      alert.title.toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                          letterSpacing: -0.015,
-                        ),
-                      ),
-                    ],
-                  ),
-            ),
-
-              // Sección Details (mensaje)
-            Expanded(
-              child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Icono + Título
+              Center(
                 child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Text(loc.message, style: sectionTitleStyle),
-                    const SizedBox(height: 8),
+                    CircleAvatar(
+                      backgroundColor: color.withOpacity(0.15),
+                      radius: 30,
+                      child: Icon(icon, color: color, size: 30),
+                    ),
+                    const SizedBox(height: 12),
                     Text(
-                      alert.message,
-                      style: detailTextStyle,
+                      alert.title.toUpperCase(),
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    const SizedBox(height: 24),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 28),
 
-            // Botón "Look in Map"
-                      SizedBox(
+              // Mensaje
+              Text(loc.message, style: sectionTitleStyle),
+              const SizedBox(height: 10),
+              Text(alert.message, style: detailTextStyle),
+              const SizedBox(height: 28),
+
+              // Botón moderno
+              SizedBox(
                 width: double.infinity,
-                height: 40,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                            backgroundColor: color,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    textStyle: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                      letterSpacing: 0.015,
-                    ),
-                  ),
+                child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -158,32 +132,40 @@ class AlertDetailScreen extends StatelessWidget {
                       ),
                     );
                   },
-                          child: Text(loc.lookInMap,
-                              overflow: TextOverflow.ellipsis),
-                        ),
-                      ),
-
-                      const SizedBox(height: 32),
-
-                      // Sección Alert Information (grid)
-                      Text(loc.alertInformation, style: sectionTitleStyle),
-                      const SizedBox(height: 12),
-
-                      buildDetailRow(loc.regions, alert.regions.toString().replaceAll('[', '').replaceAll(']', '') ?? 'N/A'),
-                      buildDetailRow(loc.timestamp,
-                          AlertUtils.formatDate(alert.timestamp)),
-                      buildDetailRow(
-                          loc.alertPriority, alert.priority ?? 'N/A'),
-                      buildDetailRow(loc.source, alert.source ?? 'N/A'),
-
-                      const SizedBox(height: 24),
-                    ],
+                  icon: const Icon(Icons.map_rounded, size: 20),
+                  label: Text(loc.lookInMap),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: color,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    elevation: 3,
+                    shadowColor: color.withOpacity(0.4),
+                  ),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 32),
+
+              // Información adicional
+              Text(loc.alertInformation, style: sectionTitleStyle),
+              const SizedBox(height: 12),
+              buildDetailCard(
+                  loc.regions,
+                  alert.regions
+                      ?.toString()
+                      .replaceAll('[', '')
+                      .replaceAll(']', '') ??
+                      'N/A'),
+              buildDetailCard(
+                  loc.timestamp, AlertUtils.formatDate(alert.timestamp)),
+              buildDetailCard(loc.alertPriority, alert.priority ?? 'N/A'),
+              buildDetailCard(loc.source, alert.source ?? 'N/A'),
+              const SizedBox(height: 40),
+            ],
+          ),
         ),
-      ),
       ),
     );
   }

@@ -26,19 +26,9 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   void initState() {
     super.initState();
-
-    _animController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 800),
-    );
-
-    _fadeIn = CurvedAnimation(
-      parent: _animController,
-      curve: Curves.easeIn,
-    );
-
+    _animController = AnimationController(vsync: this, duration: const Duration(milliseconds: 800));
+    _fadeIn = CurvedAnimation(parent: _animController, curve: Curves.easeIn);
     _animController.forward();
-
     _loadAlerts();
   }
 
@@ -65,11 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 point: LatLng(loc.lat, loc.lon),
                 width: 40,
                 height: 40,
-                child: Icon(
-                  Icons.location_on,
-                  color: color,
-                  size: 32,
-                ),
+                child: Icon(Icons.location_on, color: color, size: 32),
               ),
             );
           }
@@ -94,16 +80,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    const backgroundColor = Color(0xFF101323);
-    const secondaryBackgroundColor = Color(0xFF21284a);
-    const footerBackgroundColor = Color(0xFF181d35);
+    const backgroundColor = Color(0xFF0E0F14);
+    const cardColor = Color(0xFF1A1C24);
+    const footerColor = Color(0xFF14161F);
     const textColor = Colors.white;
-    const secondaryTextColor = Color(0xFF8e99cc);
-
-    final sectionTitleStyle = Theme.of(context).textTheme.titleLarge?.copyWith(
-      fontWeight: FontWeight.bold,
-      color: textColor,
-    );
+    const secondaryText = Color(0xFF9ba1bb);
 
     final loc = AppLocalizations.of(context)!;
 
@@ -116,151 +97,124 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               child: FadeTransition(
                 opacity: _fadeIn,
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.only(bottom: 16),
+                  padding: const EdgeInsets.only(bottom: 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Header
-                      Container(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                        color: backgroundColor,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(20, 16, 20, 8),
                         child: Row(
                           children: [
-                            const Spacer(),
-                            Text(
-                              loc.alertsTitle,
-                              style: const TextStyle(
-                                color: textColor,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: -0.015,
+                            const Icon(Icons.public, color: textColor, size: 28),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: Text(
+                                loc.appTitle,
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: textColor,
+                                ),
                               ),
                             ),
-                            const Spacer(),
                             IconButton(
-                              icon: const Icon(Icons.settings, color: Colors.white),
-                              onPressed: () {
-                                // a futuro opciones sobre las alertas
-                                // TODO: Acción configuración
-                              },
+                              icon: const Icon(Icons.person_rounded, color: Colors.white),
+                              onPressed: () {},
                             ),
                           ],
                         ),
                       ),
 
-                      // Latest Alerts Title
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            loc.recentAlerts,
-                            style: sectionTitleStyle?.copyWith(fontSize: 22),
-                          ),
+                      // Recent Alerts
+                      _buildSectionTitle(loc.recentAlerts),
+                      _recentAlerts.isEmpty
+                          ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Text(
+                          loc.noRecentAlerts,
+                          style: const TextStyle(color: secondaryText),
                         ),
-                      ),
+                      )
+                          : ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: _recentAlerts.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemBuilder: (context, index) {
+                          final alert = _recentAlerts[index];
+                          final icon = AlertUtils.getIconLucid(alert.type);
+                          final color = AlertUtils.getAlertColor(alert.type);
 
-                      // Latest Alerts List (shrinkWrap: true)
-                      if (_recentAlerts.isEmpty)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: Text(
-                            loc.noRecentAlerts,
-                            style: TextStyle(color: secondaryTextColor),
-                          ),
-                        )
-                      else
-                        ListView.separated(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(horizontal: 16),
-                          itemCount: _recentAlerts.length,
-                          separatorBuilder: (_, __) => const SizedBox(height: 8),
-                          itemBuilder: (context, index) {
-                            final alert = _recentAlerts[index];
-                            final color = AlertUtils.getAlertColor(alert.type);
-                            final icon = AlertUtils.getIconLucid(alert.type);
-
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => AlertDetailScreen(alert: alert),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: secondaryBackgroundColor,
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 40,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        color: color,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Icon(icon, color: Colors.white, size: 24),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            alert.title,
-                                            style: const TextStyle(
-                                              color: textColor,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 16,
-                                              overflow: TextOverflow.ellipsis,
-                                            ),
-                                            maxLines: 1,
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Text(
-                                            AlertUtils.formatTimestamp(alert.timestamp),
-                                            style: TextStyle(
-                                              color: secondaryTextColor,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                          return GestureDetector(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (_) => AlertDetailScreen(alert: alert)),
+                            ),
+                            child: Container(
+                              padding: const EdgeInsets.all(14),
+                              decoration: BoxDecoration(
+                                color: cardColor,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.08),
+                                    blurRadius: 6,
+                                    offset: const Offset(0, 3),
+                                  )
+                                ],
                               ),
-                            );
-                          },
-                        ),
-
-                      // Map Section Title
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            loc.alertMap,
-                            style: sectionTitleStyle?.copyWith(fontSize: 22),
-                          ),
-                        ),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 42,
+                                    height: 42,
+                                    decoration: BoxDecoration(
+                                      color: color,
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Icon(icon, color: Colors.white),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          alert.title,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: textColor,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          AlertUtils.formatTimestamp(alert.timestamp),
+                                          style: const TextStyle(color: secondaryText, fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
 
-                      // Map with FlutterMap and markers
+                      // Map Section
+                      _buildSectionTitle(loc.alertMap),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(16),
                           child: Material(
                             color: Colors.transparent,
                             child: InkWell(
-                              borderRadius: BorderRadius.circular(12),
                               onTap: () {
                                 Navigator.push(
                                   context,
@@ -290,29 +244,23 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                           ),
                         ),
                       ),
+                      const SizedBox(height: 20),
                     ],
                   ),
                 ),
               ),
             ),
 
-            // Footer Navigation Bar
+            // Footer Navigation
             Container(
-              color: footerBackgroundColor,
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              color: footerColor,
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
+                  _buildFooterButton(icon: Icons.home_rounded, label: loc.home, isActive: true, onTap: () {}),
                   _buildFooterButton(
-                    icon: Icons.home,
-                    label: loc.home,
-                    isActive: true,
-                    onTap: () {
-                      // Ya estamos en Alerts
-                    },
-                  ),
-                  _buildFooterButton(
-                    icon: Icons.map_outlined,
+                    icon: Icons.map_rounded,
                     label: loc.alertMap,
                     isActive: false,
                     onTap: () {
@@ -323,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     },
                   ),
                   _buildFooterButton(
-                    icon: Icons.history,
+                    icon: Icons.history_rounded,
                     label: loc.history,
                     isActive: false,
                     onTap: () {
@@ -334,18 +282,31 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                     },
                   ),
                   _buildFooterButton(
-                    icon: Icons.settings,
+                    icon: Icons.settings_rounded,
                     label: loc.appTitle,
-                    // No tienes "Settings" en el arb, usa appTitle o agrega uno nuevo
                     isActive: false,
                     onTap: () {
-                      // Acción configuración
+                      // Configuración futura
                     },
                   ),
                 ],
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 28, 20, 12),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.white,
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
         ),
       ),
     );
@@ -373,7 +334,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               color: isActive ? activeColor : inactiveColor,
               fontSize: 12,
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.015,
             ),
           ),
         ],
