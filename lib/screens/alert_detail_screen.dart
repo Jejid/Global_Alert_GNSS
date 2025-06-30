@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:global_alert_gnss/models/alert_message.dart';
+import 'package:global_alert_gnss/models/alert_message_model.dart';
 import '../utils/alert_utils.dart';
+import 'map_screen.dart';
+import '../l10n/app_localizations.dart';
 
 class AlertDetailScreen extends StatelessWidget {
   final AlertMessage alert;
@@ -9,108 +11,159 @@ class AlertDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = getIconLucid(alert.type);
-    final color = getAlertColor(alert.type);
+    final icon = AlertUtils.getIconLucid(alert.type);
+    final color = AlertUtils.getAlertColor(alert.type);
+    final loc = AppLocalizations.of(context)!;
 
-    Text buildFieldTitle(String text) => Text(
-      text,
-      style: const TextStyle(
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
-      ),
+    const backgroundColor = Color(0xFF0E0F14);
+    const cardColor = Color(0xFF1A1C24);
+    const textWhite = Colors.white;
+    const textGray = Color(0xFF9ba1bb);
+
+    final sectionTitleStyle = const TextStyle(
+      color: textWhite,
+      fontSize: 20,
+      fontWeight: FontWeight.w600,
     );
 
-    Text buildFieldContent(String text) => Text(
-      text,
-      style: const TextStyle(fontSize: 16),
+    final labelStyle = const TextStyle(
+      color: textGray,
+      fontSize: 14,
     );
+
+    final valueStyle = const TextStyle(
+      color: textWhite,
+      fontSize: 14,
+    );
+
+    final detailTextStyle = const TextStyle(
+      color: textWhite,
+      fontSize: 16,
+      height: 1.4,
+    );
+
+    Widget buildDetailCard(String label, String value) {
+      return Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white10),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('$label: ', style: labelStyle),
+            Expanded(child: Text(value, style: valueStyle)),
+          ],
+        ),
+      );
+    }
 
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        title: Text(alert.title),
-        backgroundColor: color,
+        backgroundColor: backgroundColor,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: textWhite),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: Text(
+            alert.type.toUpperCase(),
+            key: ValueKey(alert.type),
+            style: const TextStyle(
+              color: textWhite,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+        ),
+        centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Card(
-          elevation: 4,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          child: Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Encabezado con ícono y tipo
-                Row(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Icono + Título
+              Center(
+                child: Column(
                   children: [
-                    Icon(icon, size: 32, color: color),
-                    const SizedBox(width: 12),
+                    CircleAvatar(
+                      backgroundColor: color.withOpacity(0.15),
+                      radius: 30,
+                      child: Icon(icon, color: color, size: 30),
+                    ),
+                    const SizedBox(height: 12),
                     Text(
-                      alert.type.toUpperCase(),
+                      alert.title.toUpperCase(),
+                      textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
                         color: color,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 20),
-                const Divider(),
+              ),
+              const SizedBox(height: 28),
 
-                // Mensaje principal
-                buildFieldTitle("Mensaje:"),
-                buildFieldContent(alert.message),
-                const SizedBox(height: 16),
+              // Mensaje
+              Text(loc.message, style: sectionTitleStyle),
+              const SizedBox(height: 10),
+              Text(alert.message, style: detailTextStyle),
+              const SizedBox(height: 28),
 
-                buildFieldTitle("Fecha de emisión:"),
-                buildFieldContent(formatDate(alert.timestamp)),
-                const SizedBox(height: 16),
-
-                if (alert.regions != null && alert.regions!.isNotEmpty) ...[
-                  buildFieldTitle("Región(es):"),
-                  buildFieldContent(alert.regions!.join(", ")),
-                  const SizedBox(height: 16),
-                ],
-
-                if (alert.locations != null && alert.locations!.isNotEmpty) ...[
-                  buildFieldTitle("Ubicación aproximada:"),
-                  buildFieldContent(
-                    alert.locations!
-                        .map((l) => '${l.lat}, ${l.lon}')
-                        .join("  |  "),
-                  ),
-                  const SizedBox(height: 16),
-                ],
-
-                if (alert.validUntil != null) ...[
-                  buildFieldTitle("Válido hasta:"),
-                  buildFieldContent(formatDate(alert.validUntil!)),
-                  const SizedBox(height: 16),
-                ],
-
-                const Spacer(),
-                Center(
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Función de mapa no disponible aún")),
-                      );
-                    },
-                    icon: const Icon(Icons.map_outlined),
-                    label: const Text("Ver en el mapa"),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: color,
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                      textStyle: const TextStyle(fontSize: 16),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+              // Botón moderno
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => MapScreen(alerts: [alert]),
                       ),
+                    );
+                  },
+                  icon: const Icon(Icons.map_rounded, size: 20),
+                  label: Text(loc.lookInMap),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: color,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
                     ),
+                    elevation: 3,
+                    shadowColor: color.withOpacity(0.4),
                   ),
                 ),
-              ],
-            ),
+              ),
+              const SizedBox(height: 32),
+
+              // Información adicional
+              Text(loc.alertInformation, style: sectionTitleStyle),
+              const SizedBox(height: 12),
+              buildDetailCard(
+                  loc.regions,
+                  alert.regions
+                      ?.toString()
+                      .replaceAll('[', '')
+                      .replaceAll(']', '') ??
+                      'N/A'),
+              buildDetailCard(
+                  loc.timestamp, AlertUtils.formatDate(alert.timestamp)),
+              buildDetailCard(loc.alertPriority, alert.priority ?? 'N/A'),
+              buildDetailCard(loc.source, alert.source ?? 'N/A'),
+              const SizedBox(height: 40),
+            ],
           ),
         ),
       ),

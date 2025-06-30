@@ -1,8 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
         android:label="global_alert_gnss"
-        android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDqkQ-G3VaX3m4DaQAzNBHUPQULcX1Ek9o" />
         <activity
             android:name=".MainActivity"
             android:exported="true"

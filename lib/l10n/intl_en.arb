@@ -1,0 +1,25 @@
+{
+  "@@locale": "en",
+  "alertsTitle": "Alerts",
+  "viewAlerts": "View Alerts",
+  "validUntil": "Valid until:",
+  "region": "Region",
+  "regions": "Region(s)",
+  "loadingError": "Error loading alerts",
+  "appTitle": "Global Alert GNSS",
+  "recentAlerts": "Recent Alerts",
+  "noRecentAlerts": "No Recent Alerts",
+  "alertMap": "Alert Map",
+  "history": "All Alerts",
+  "filterByType": "Filter Alert by type",
+  "home": "Home",
+  "searchAlerts": "Search Alerts",
+  "alertPriority": "Priority",
+  "lookInMap": "Look in Map",
+  "message": "Message",
+  "alertInformation": "Alert Information",
+  "timestamp": "Timestamp",
+  "source": "Source",
+  "settings": "Settings"
+}
+
