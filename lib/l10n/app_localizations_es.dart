@@ -67,4 +67,7 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get source => 'Fuente';
+
+  @override
+  String get settings => 'Configuraciones';
 }

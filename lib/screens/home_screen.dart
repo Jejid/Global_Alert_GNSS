@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:global_alert_gnss/screens/settings_screen.dart';
 import 'package:latlong2/latlong.dart';
 import '../utils/alert_utils.dart';
 import '../models/alert_message_model.dart';
@@ -258,7 +259,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  _buildFooterButton(icon: Icons.home_rounded, label: loc.home, isActive: true, onTap: () {}),
+                  _buildFooterButton(icon:
+                      Icons.home_rounded,
+                      label: loc.home,
+                      isActive: true,
+                      onTap: () {}),
                   _buildFooterButton(
                     icon: Icons.map_rounded,
                     label: loc.alertMap,
@@ -283,10 +288,13 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                   ),
                   _buildFooterButton(
                     icon: Icons.settings_rounded,
-                    label: loc.appTitle,
+                    label: loc.settings,
                     isActive: false,
                     onTap: () {
-                      // Configuración futura
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                      );
                     },
                   ),
                 ],

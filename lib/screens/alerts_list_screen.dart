@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:global_alert_gnss/screens/settings_screen.dart';
 import '../models/alert_message_model.dart';
 import '../services/alert_service.dart';
 import '../utils/alert_utils.dart';
@@ -227,10 +228,13 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
                   ),
                   _buildFooterButton(
                     icon: Icons.settings_rounded,
-                    label: loc.appTitle,
+                    label: loc.settings,
                     isActive: false,
                     onTap: () {
-                      // navegación futura
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                      );
                     },
                   ),
                 ],

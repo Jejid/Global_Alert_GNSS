@@ -19,5 +19,6 @@
   "message": "Mensaje",
   "alertInformation": "Información de Alerta",
   "timestamp": "Fecha de envío",
-  "source": "Fuente"
+  "source": "Fuente",
+  "settings": "Configuraciones"
 }

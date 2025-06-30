@@ -19,6 +19,7 @@
   "message": "Message",
   "alertInformation": "Alert Information",
   "timestamp": "Timestamp",
-  "source": "Source"
+  "source": "Source",
+  "settings": "Settings"
 }
 
