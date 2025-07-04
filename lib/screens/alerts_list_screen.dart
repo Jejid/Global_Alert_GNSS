@@ -1,7 +1,8 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/screens/settings_screen.dart';
 import '../models/alert_message_model.dart';
-import '../services/alert_service.dart';
+import '../services/gnss_stream_service.dart';
 import '../utils/alert_utils.dart';
 import 'alert_detail_screen.dart';
 import '../l10n/app_localizations.dart';
@@ -15,35 +16,49 @@ class AlertsListScreen extends StatefulWidget {
 }
 
 class _AlertsListScreenState extends State<AlertsListScreen> {
-  List<AlertMessage> _alerts = [];
+  final GnssStreamService _gnssService = GnssStreamService();
+  final List<AlertMessage> _alerts = [];
   List<AlertMessage> _filteredAlerts = [];
+  StreamSubscription<AlertMessage>? _subscription;
   String _searchQuery = '';
 
   @override
   void initState() {
     super.initState();
-    _loadAlerts();
+    _startSimulatedAlertStream();
   }
 
-  Future<void> _loadAlerts() async {
-    final alerts = await AlertService.loadAlerts();
-    setState(() {
-      _alerts = alerts;
-      _filteredAlerts = alerts;
+  void _startSimulatedAlertStream() async {
+    await _gnssService.init();
+    _subscription = _gnssService.getAlertStream().listen((alert) {
+      setState(() {
+        _alerts.add(alert);
+        _applySearch(_searchQuery); // mantiene filtrado
+      });
     });
   }
 
-  void _onSearchChanged(String query) {
+  void _applySearch(String query) {
     setState(() {
       _searchQuery = query.trim().toLowerCase();
       _filteredAlerts = _searchQuery.isEmpty
-          ? _alerts
+          ? List.from(_alerts)
           : _alerts.where((alert) {
         final title = alert.title.toLowerCase();
         final regions = alert.regions?.join(', ').toLowerCase() ?? '';
         return title.contains(_searchQuery) || regions.contains(_searchQuery);
       }).toList();
     });
+  }
+
+  void _onSearchChanged(String query) {
+    _applySearch(query);
+  }
+
+  @override
+  void dispose() {
+    _subscription?.cancel();
+    super.dispose();
   }
 
   @override
@@ -83,7 +98,7 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
                   const Opacity(
                     opacity: 0,
                     child: Icon(Icons.list_rounded, size: 28),
-                  ), // balance visual
+                  ),
                 ],
               ),
             ),
@@ -224,7 +239,7 @@ class _AlertsListScreenState extends State<AlertsListScreen> {
                     icon: Icons.history_rounded,
                     label: loc.history,
                     isActive: true,
-                    onTap: () {}, // ya está aquí
+                    onTap: () {},
                   ),
                   _buildFooterButton(
                     icon: Icons.settings_rounded,
