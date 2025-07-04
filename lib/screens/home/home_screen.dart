@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/screens/alerts_list_screen.dart';
-import 'package:global_alert_gnss/screens/map_screen.dart';
+import 'package:global_alert_gnss/screens/map/map_screen.dart';
 import 'package:global_alert_gnss/screens/settings_screen.dart';
 import 'package:global_alert_gnss/l10n/app_localizations.dart';
 
@@ -51,21 +51,22 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
               ),
             ),
             FooterNavBar(
-              currentScreen: "home",
-              onNavigate: (target) {
-                if (target == "map") {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => MapScreen(alerts: _controller.monthlyAlerts),
-                  ));
-                } else if (target == "history") {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => const AlertsListScreen(),
-                  ));
-                } else if (target == "settings") {
-                  Navigator.push(context, MaterialPageRoute(
-                    builder: (_) => const SettingsScreen(),
-                  ));
-                }
+              current: NavPage.home,
+              onHomeTap: () {},
+              onMapTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (_) => MapScreen(alerts: _controller.monthlyAlerts),
+                ));
+              },
+              onHistoryTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (_) => const AlertsListScreen(),
+                ));
+              },
+              onSettingsTap: () {
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (_) => const SettingsScreen(),
+                ));
               },
             ),
           ],

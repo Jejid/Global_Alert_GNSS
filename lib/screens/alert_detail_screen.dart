@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/models/alert_message_model.dart';
 import '../utils/alert_utils.dart';
-import 'map_screen.dart';
+import 'map/map_screen.dart';
 import '../l10n/app_localizations.dart';
 
 class AlertDetailScreen extends StatelessWidget {

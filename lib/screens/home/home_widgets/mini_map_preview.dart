@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../../models/alert_message_model.dart';
-import '../../map_screen.dart';
+import '../../map/map_screen.dart';
 
 
 // el minimapa

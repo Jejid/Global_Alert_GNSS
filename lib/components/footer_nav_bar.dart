@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 
-class FooterNavBar extends StatelessWidget {
-  final String currentScreen; // "home", "map", "history", "settings"
-  final void Function(String) onNavigate;
+/// Enum para indicar la pantalla actual
+enum NavPage { home, map, history, settings }
 
-  const FooterNavBar({super.key, required this.currentScreen, required this.onNavigate});
+class FooterNavBar extends StatelessWidget {
+  final NavPage current;
+  final VoidCallback onHomeTap;
+  final VoidCallback onMapTap;
+  final VoidCallback onHistoryTap;
+  final VoidCallback onSettingsTap;
+
+  const FooterNavBar({
+    super.key,
+    required this.current,
+    required this.onHomeTap,
+    required this.onMapTap,
+    required this.onHistoryTap,
+    required this.onSettingsTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,26 +33,26 @@ class FooterNavBar extends StatelessWidget {
           _buildFooterButton(
             icon: Icons.home_rounded,
             label: loc.home,
-            isActive: currentScreen == "home",
-            onTap: () => onNavigate("home"),
+            isActive: current == NavPage.home,
+            onTap: onHomeTap,
           ),
           _buildFooterButton(
             icon: Icons.map_rounded,
             label: loc.alertMap,
-            isActive: currentScreen == "map",
-            onTap: () => onNavigate("map"),
+            isActive: current == NavPage.map,
+            onTap: onMapTap,
           ),
           _buildFooterButton(
             icon: Icons.history_rounded,
             label: loc.history,
-            isActive: currentScreen == "history",
-            onTap: () => onNavigate("history"),
+            isActive: current == NavPage.history,
+            onTap: onHistoryTap,
           ),
           _buildFooterButton(
             icon: Icons.settings_rounded,
             label: loc.settings,
-            isActive: currentScreen == "settings",
-            onTap: () => onNavigate("settings"),
+            isActive: current == NavPage.settings,
+            onTap: onSettingsTap,
           ),
         ],
       ),

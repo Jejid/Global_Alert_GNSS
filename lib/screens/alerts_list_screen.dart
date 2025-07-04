@@ -6,7 +6,7 @@ import '../services/gnss_stream_service.dart';
 import '../utils/alert_utils.dart';
 import 'alert_detail_screen.dart';
 import '../l10n/app_localizations.dart';
-import 'map_screen.dart';
+import 'map/map_screen.dart';
 
 class AlertsListScreen extends StatefulWidget {
   const AlertsListScreen({super.key});
