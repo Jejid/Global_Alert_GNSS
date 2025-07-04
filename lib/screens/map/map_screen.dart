@@ -4,7 +4,7 @@ import 'map_controller.dart';
 import 'map_sections.dart';
 import 'fab_gps_button.dart';
 import '../../models/alert_message_model.dart';
-import '../alerts_list_screen.dart';
+import '../alerts/alerts_screen.dart';
 import '../settings_screen.dart';
 import '../home/home_screen.dart';
 
