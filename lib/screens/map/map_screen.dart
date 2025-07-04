@@ -5,7 +5,7 @@ import 'map_sections.dart';
 import 'fab_gps_button.dart';
 import '../../models/alert_message_model.dart';
 import '../alerts/alerts_screen.dart';
-import '../settings_screen.dart';
+import '../settings/settings_screen.dart';
 import '../home/home_screen.dart';
 
 class MapScreen extends StatelessWidget {

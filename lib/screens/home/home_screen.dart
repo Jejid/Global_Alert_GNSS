@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/screens/alerts/alerts_screen.dart';
 import 'package:global_alert_gnss/screens/map/map_screen.dart';
-import 'package:global_alert_gnss/screens/settings_screen.dart';
+import 'package:global_alert_gnss/screens/settings/settings_screen.dart';
 import 'package:global_alert_gnss/l10n/app_localizations.dart';
 
 import 'home_controller.dart';

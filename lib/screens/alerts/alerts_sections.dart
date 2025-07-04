@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../components/footer_nav_bar.dart';
 import '../../l10n/app_localizations.dart';
 import '../map/map_screen.dart';
-import '../settings_screen.dart';
+import '../settings/settings_screen.dart';
 import '../home/home_screen.dart';
 import 'alerts_controller.dart';
 import 'alerts_list.dart';
