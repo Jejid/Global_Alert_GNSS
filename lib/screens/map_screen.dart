@@ -8,7 +8,7 @@ import '../utils/alert_utils.dart';
 import '../screens/alert_detail_screen.dart';
 import '../screens/alerts_list_screen.dart';
 import '../l10n/app_localizations.dart';
-import 'home_screen.dart';
+import 'home/home_screen.dart';
 
 class MapScreen extends StatefulWidget {
   final List<AlertMessage> alerts;

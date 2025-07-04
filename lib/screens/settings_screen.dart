@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../l10n/app_localizations.dart';
 import 'alerts_list_screen.dart';
-import 'home_screen.dart';
+import 'home/home_screen.dart';
 import 'map_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
