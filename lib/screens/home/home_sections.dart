@@ -3,7 +3,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../../l10n/app_localizations.dart';
-import '../../screens/alert_detail_screen.dart';
+import '../alert_detail/alert_detail_screen.dart';
 import '../../utils/alert_utils.dart';
 import 'home_controller.dart';
 import 'home_widgets/alert_card.dart';
