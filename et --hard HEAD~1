@@ -1,0 +1,143 @@
+[33mcommit 8a3c7bb0a7eed43d0548254921b476dd2d3f52aa[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/access_location-and-refactoring_code[m[33m)[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Fri Jul 4 16:14:21 2025 -0500
+
+    Refactored home screen
+
+[33mcommit b227f15d70e4f7462f7d05520602e68188a7d167[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Fri Jul 4 14:16:25 2025 -0500
+
+    StreamBuilder<AlertMessage> to first simulate realtime incoming alerts
+
+[33mcommit aad28dd3f6c225c997da42a57039667a7c751e60[m[33m ([m[1;31morigin/feature/access_location-and-refactoring_code[m[33m)[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 21:49:53 2025 -0500
+
+    location access and ubication in map done
+
+[33mcommit 3fbeab188259fb2dda871df8902b4cb32355d6d2[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m
+Merge: 7d6d1a3 faa9f24
+Author: Edwin López <jejidnike@hotmail.com>
+Date:   Sun Jun 29 20:23:41 2025 -0500
+
+    Merge pull request #2 from Jejid/feature/new_screens
+    
+    Feature/new screens
+
+[33mcommit faa9f24663025c65d3bd291bac22202070a9db95[m[33m ([m[1;31morigin/feature/new_screens[m[33m, [m[1;32mfeature/new_screens[m[33m)[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 20:21:59 2025 -0500
+
+    UI base done
+
+[33mcommit 3b7d1f20fbbfdc699ecb7f964140b2688d41bde0[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 19:22:50 2025 -0500
+
+    New looks for screens
+
+[33mcommit afabacfc004e527c04e42e467099f955d5b87bb5[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 18:49:40 2025 -0500
+
+    new look for alert_detail_screen.dart v2
+
+[33mcommit 4d0817f4a37d357d10b2f231b1336c8560d203e3[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 17:37:46 2025 -0500
+
+    new look for alerts_list_screen.dart
+
+[33mcommit c9362e0d7a933eea2ef27438640b3eb0206c226b[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Sun Jun 29 16:03:11 2025 -0500
+
+    new look for home_screen.dart
+
+[33mcommit 996f1d9c7759f0ae5c1e0c6f3bb380e0042c769f[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 22:23:49 2025 -0500
+
+    changes on alerts_list_screen.dart
+
+[33mcommit e9659d956eaab02e957d24943a21f4bba79a4a3b[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 21:58:14 2025 -0500
+
+    home screen, map screen and alert_detail_screen.dart improved
+
+[33mcommit ec0c8ca879ce6a87fe5a5100b854ba6c2a4f6d45[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 20:43:43 2025 -0500
+
+    HomeScreen with flutter_map instead of google_flutter_map to manage offline later
+
+[33mcommit 2e8e0026df8cb5018d388a29c55e1e532368007b[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 17:27:33 2025 -0500
+
+    HomeScreen mejorada
+
+[33mcommit 9cb88ca5c957d816038ab28be97620436b4c2f2b[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 16:15:23 2025 -0500
+
+    Api Key for map aplied, new homescrenn
+
+[33mcommit d5d427e5e6a37b3a02245aff5c7b6cd99bf7b508[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 13:35:55 2025 -0500
+
+    internationalization languages, en and es. l10n yaml
+
+[33mcommit d16346c51b5ccbf7ede95102cea1c9928fa16cce[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 13:35:30 2025 -0500
+
+    internationalization languages, en and es
+
+[33mcommit 96a0b873ae365e284aca877975698f529c0f9a9a[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Thu Jun 19 12:31:59 2025 -0500
+
+    home screen and alert list created
+
+[33mcommit 7d6d1a3dcc3ee6c29f42b047bc81c3a81a374461[m
+Merge: e9bb718 be12064
+Author: Edwin López <jejidnike@hotmail.com>
+Date:   Thu Jun 19 11:56:10 2025 -0500
+
+    Merge pull request #1 from Jejid/feature/json-reading
+    
+    Feature/json reading
+
+[33mcommit be120640df7d7b8f6dde6e6df4df61c877593a37[m[33m ([m[1;31morigin/feature/json-reading[m[33m, [m[1;32mfeature/json-reading[m[33m)[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Wed Jun 18 22:54:40 2025 -0500
+
+    visual modifications on ListCards and Json atributes
+
+[33mcommit 32b166650eb4b814a70f9baffac24062a8ad002a[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Tue Jun 17 23:27:16 2025 -0500
+
+    alert screen detail
+
+[33mcommit bead05290312599985372a12a742c6a27f02d3f3[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Tue Jun 17 21:42:47 2025 -0500
+
+    json list of alerts
+
+[33mcommit c57a52a87ccebfeee9e59457ffb36ba5f224aea7[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Tue Jun 17 20:06:35 2025 -0500
+
+    base json reading
+
+[33mcommit e9bb718fd430a88a32d6cc5f45830a53aab6bcd0[m
+Author: EdwinLopez <jejidnike@hotmail.com>
+Date:   Tue Jun 17 19:36:10 2025 -0500
+
+    First commit to start working
