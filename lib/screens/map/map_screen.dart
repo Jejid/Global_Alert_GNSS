@@ -32,9 +32,10 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
 
     mapControllerState = MapControllerState(vsync: this);
 
-    // 👇 No mover automáticamente si es alerta específica
-    final shouldAnimate = widget.specificAlerts == null;
-    mapControllerState.getUserLocation(animate: shouldAnimate);
+    // ✅ Desactiva el movimiento si viene con alertas específicas
+    mapControllerState.disableAutoMove = widget.specificAlerts != null;
+
+    mapControllerState.getUserLocation();
   }
 
   @override

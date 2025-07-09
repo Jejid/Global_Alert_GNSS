@@ -13,7 +13,9 @@ class MapControllerState with ChangeNotifier {
   MapControllerState({required TickerProvider vsync})
     : animatedMapController = AnimatedMapController(vsync: vsync);
 
-  Future<void> getUserLocation({bool animate = true}) async {
+  Future<void> getUserLocation() async {
+    bool animate = !disableAutoMove;
+
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
 
@@ -30,16 +32,22 @@ class MapControllerState with ChangeNotifier {
 
     _userLocation = LatLng(position.latitude, position.longitude);
 
-    // ✅ Solo mover el mapa si se pide explícitamente
     if (animate && _userLocation != null) {
       animatedMapController.animateTo(
         dest: _userLocation!,
-        zoom: 3.2,
+        zoom: 4,
         duration: const Duration(milliseconds: 1000),
         curve: Curves.easeInOut,
       );
     }
 
     notifyListeners();
+  }
+
+  Future<void> centerToUserLocation() async {
+    final previous = disableAutoMove;
+    disableAutoMove = false;
+    await getUserLocation();
+    disableAutoMove = previous;
   }
 }

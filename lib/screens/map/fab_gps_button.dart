@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'map_controller.dart';
 
 class FabGpsButton extends StatelessWidget {
@@ -12,7 +13,8 @@ class FabGpsButton extends StatelessWidget {
       right: 18,
       child: FloatingActionButton.small(
         backgroundColor: Colors.black54,
-        onPressed: () => context.read<MapControllerState>().getUserLocation(),
+        onPressed: () =>
+            context.read<MapControllerState>().centerToUserLocation(),
         child: const Icon(Icons.my_location, color: Colors.white),
       ),
     );

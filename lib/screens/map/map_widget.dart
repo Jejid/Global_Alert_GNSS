@@ -73,7 +73,7 @@ class MapWidget extends StatelessWidget {
             userLocation: mapState.userLocation,
             isSpecificAlert: isSpecificAlert,
           ),
-          initialZoom: 4.2,
+          initialZoom: 8,
         ),
         children: [
           TileLayer(
