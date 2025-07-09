@@ -1,28 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../providers/navigation_provider.dart';
 import '../l10n/app_localizations.dart';
 
-/// Enum para indicar la pantalla actual
-enum NavPage { home, map, history, settings }
-
 class FooterNavBar extends StatelessWidget {
-  final NavPage current;
-  final VoidCallback onHomeTap;
-  final VoidCallback onMapTap;
-  final VoidCallback onHistoryTap;
-  final VoidCallback onSettingsTap;
-
-  const FooterNavBar({
-    super.key,
-    required this.current,
-    required this.onHomeTap,
-    required this.onMapTap,
-    required this.onHistoryTap,
-    required this.onSettingsTap,
-  });
+  const FooterNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
     final loc = AppLocalizations.of(context)!;
+    final currentIndex = context.watch<NavigationProvider>().currentIndex;
+    final provider = context.read<NavigationProvider>();
 
     return Container(
       color: const Color(0xFF14161F),
@@ -33,26 +21,26 @@ class FooterNavBar extends StatelessWidget {
           _buildFooterButton(
             icon: Icons.home_rounded,
             label: loc.home,
-            isActive: current == NavPage.home,
-            onTap: onHomeTap,
+            isActive: currentIndex == 0,
+            onTap: () => provider.setIndex(0),
           ),
           _buildFooterButton(
             icon: Icons.map_rounded,
             label: loc.alertMap,
-            isActive: current == NavPage.map,
-            onTap: onMapTap,
+            isActive: currentIndex == 1,
+            onTap: () => provider.setIndex(1),
           ),
           _buildFooterButton(
             icon: Icons.history_rounded,
             label: loc.history,
-            isActive: current == NavPage.history,
-            onTap: onHistoryTap,
+            isActive: currentIndex == 2,
+            onTap: () => provider.setIndex(2),
           ),
           _buildFooterButton(
             icon: Icons.settings_rounded,
             label: loc.settings,
-            isActive: current == NavPage.settings,
-            onTap: onSettingsTap,
+            isActive: currentIndex == 3,
+            onTap: () => provider.setIndex(3),
           ),
         ],
       ),

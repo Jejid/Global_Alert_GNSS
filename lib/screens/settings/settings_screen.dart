@@ -19,29 +19,6 @@ class SettingsScreen extends StatelessWidget {
         child: Column(
           children: [
             const Expanded(child: SettingsSections()),
-            FooterNavBar(
-              current: NavPage.settings,
-              onHomeTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                      (route) => false,
-                );
-              },
-              onMapTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const MapScreen(alerts: [])),
-                );
-              },
-              onHistoryTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AlertsListScreen()),
-                );
-              },
-              onSettingsTap: () {}, // ya estás en ajustes
-            ),
           ],
         ),
       ),

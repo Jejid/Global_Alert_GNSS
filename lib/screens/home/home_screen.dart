@@ -50,25 +50,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 child: HomeSections(controller: _controller),
               ),
             ),
-            FooterNavBar(
-              current: NavPage.home,
-              onHomeTap: () {},
-              onMapTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => MapScreen(alerts: _controller.monthlyAlerts),
-                ));
-              },
-              onHistoryTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => const AlertsListScreen(),
-                ));
-              },
-              onSettingsTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => const SettingsScreen(),
-                ));
-              },
-            ),
           ],
         ),
       ),

@@ -1,15 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../../components/footer_nav_bar.dart';
 import '../../l10n/app_localizations.dart';
-import '../map/map_screen.dart';
-import '../settings/settings_screen.dart';
-import '../home/home_screen.dart';
+import '../../providers/map_state_provider.dart';
+import '../../providers/navigation_provider.dart';
 import 'alerts_controller.dart';
 import 'alerts_list.dart';
 
-class AlertsSections extends StatelessWidget {
+class AlertsSections extends StatefulWidget {
   const AlertsSections({super.key});
+
+  @override
+  State<AlertsSections> createState() => _AlertsSectionsState();
+}
+
+class _AlertsSectionsState extends State<AlertsSections> {
+  int? _lastIndex;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final navProvider = context.watch<NavigationProvider>();
+    final mapProvider = context.read<MapStateProvider>();
+    final controller = context.read<AlertsController>();
+
+    final currentIndex = navProvider.currentIndex;
+
+    if (_lastIndex != currentIndex) {
+      if (currentIndex == 1) {
+        mapProvider.setAlerts(controller.filteredAlerts);
+      }
+      _lastIndex = currentIndex;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,25 +98,6 @@ class AlertsSections extends StatelessWidget {
             // List
             Expanded(
               child: AlertsList(alerts: controller.filteredAlerts),
-            ),
-
-            // Footer
-            FooterNavBar(
-              current: NavPage.history,
-              onHomeTap: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
-              },
-              onMapTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => MapScreen(alerts: controller.filteredAlerts),
-                ));
-              },
-              onHistoryTap: () {},
-              onSettingsTap: () {
-                Navigator.push(context, MaterialPageRoute(
-                  builder: (_) => const SettingsScreen(),
-                ));
-              },
             ),
           ],
         ),

@@ -44,7 +44,7 @@ class MapWidget extends StatelessWidget {
         mapController: mapState.animatedMapController.mapController,
         options: MapOptions(
           initialCenter: mapState.userLocation ?? const LatLng(4.236479, -72.708779),
-          initialZoom: 2.0,
+          initialZoom: 3.2,
         ),
         children: [
           TileLayer(

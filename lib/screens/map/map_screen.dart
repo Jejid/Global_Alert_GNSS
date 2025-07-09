@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:global_alert_gnss/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
+
 import 'map_controller.dart';
 import 'map_sections.dart';
 import 'fab_gps_button.dart';
-import '../../models/alert_message_model.dart';
-import '../alerts/alerts_screen.dart';
-import '../settings/settings_screen.dart';
-import '../home/home_screen.dart';
+import '../../providers/map_state_provider.dart';
 
 class MapScreen extends StatefulWidget {
-  final List<AlertMessage> alerts;
-
-  const MapScreen({super.key, required this.alerts});
+  const MapScreen({super.key});
 
   @override
   State<MapScreen> createState() => _MapScreenState();
@@ -23,11 +20,19 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    final mapStateProvider = context.read<MapStateProvider>();
+    if (mapStateProvider.alerts.isEmpty) {
+      AlertUtils.getAllAlerts().then((alerts) {
+        mapStateProvider.setAlerts(alerts);
+      });
+    }
     mapControllerState = MapControllerState(vsync: this)..getUserLocation();
   }
 
   @override
   Widget build(BuildContext context) {
+    final alerts = context.watch<MapStateProvider>().alerts;
+
     return ChangeNotifierProvider.value(
       value: mapControllerState,
       child: Scaffold(
@@ -36,20 +41,14 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
           child: Stack(
             children: [
               MapSections(
-                alerts: widget.alerts,
-                onHomeTap: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
-                ),
+                alerts: alerts,
+                onHomeTap: () {
+                  // Puedes eliminar si no usas los botones
+                },
                 onMapTap: () {},
-                onHistoryTap: () => Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const AlertsListScreen()),
-                ),
-                onSettingsTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => const SettingsScreen()),
-                ),
+                onHistoryTap: () {},
+                onSettingsTap: () {},
+                allAlerts: [],
               ),
               const FabGpsButton(),
             ],

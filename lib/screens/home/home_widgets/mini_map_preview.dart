@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
 
 import '../../../models/alert_message_model.dart';
-import '../../map/map_screen.dart';
+import '../../../../providers/navigation_provider.dart';
+import '../../../../providers/map_state_provider.dart';
 
-
-// el minimapa
 class MiniMapPreview extends StatelessWidget {
   final List<Marker> markers;
   final List<AlertMessage> alerts;
 
-  const MiniMapPreview({super.key, required this.markers, required this.alerts});
+  const MiniMapPreview({
+    super.key,
+    required this.markers,
+    required this.alerts,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +27,11 @@ class MiniMapPreview extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => MapScreen(alerts: alerts),
-                ),
-              );
+              // ✅ Enviar los mismos alerts que se usaron en el minimapa
+              Provider.of<MapStateProvider>(context, listen: false).setAlerts(alerts);
+
+              // ✅ Cambiar a la pestaña del mapa (índice 1) usando NavigationProvider
+              Provider.of<NavigationProvider>(context, listen: false).setIndex(1);
             },
             child: SizedBox(
               height: 200,
@@ -36,8 +39,11 @@ class MiniMapPreview extends StatelessWidget {
                 ignoring: true,
                 child: FlutterMap(
                   options: MapOptions(
-                    initialCenter: LatLng(4.236479, -72.708779),
+                    initialCenter: const LatLng(4.236479, -72.708779),
                     initialZoom: 2,
+                    interactionOptions: const InteractionOptions(
+                      flags: ~InteractiveFlag.all, // Desactiva interacciones
+                    ),
                   ),
                   children: [
                     TileLayer(

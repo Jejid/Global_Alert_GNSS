@@ -40,7 +40,7 @@ class AlertDetailSections extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => MapScreen(alerts: [alert])),
+                    MaterialPageRoute(builder: (_) => MapScreen()),
                   );
                 },
                 icon: const Icon(Icons.map_rounded, size: 20),

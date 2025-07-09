@@ -76,7 +76,7 @@ class HomeSections extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => AlertDetailScreen(alert: alert),
+                      builder: (_) => AlertDetailScreen(alert: alert,),
                     ),
                   );
                 },

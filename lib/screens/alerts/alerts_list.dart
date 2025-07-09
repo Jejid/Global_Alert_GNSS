@@ -29,7 +29,9 @@ class AlertsList extends StatelessWidget {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => AlertDetailScreen(alert: alert)),
+              MaterialPageRoute(
+                builder: (_) => AlertDetailScreen(alert: alert),
+              ),
             );
           },
           child: AlertCard(alert: alert),
