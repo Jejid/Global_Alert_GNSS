@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:global_alert_gnss/components/footer_nav_bar.dart';
 import 'package:global_alert_gnss/l10n/app_localizations.dart';
 
-import 'map_widget.dart';
 import '../../models/alert_message_model.dart';
+import 'map_widget.dart';
 
 class MapSections extends StatelessWidget {
-  final List<AlertMessage>? alerts;       // Ahora opcional
-  final List<AlertMessage> allAlerts;     // Lista completa para mostrar por defecto
+  final List<AlertMessage>? alerts; // Ahora opcional
+  final List<AlertMessage> allAlerts; // Lista completa para mostrar por defecto
 
   final VoidCallback onHomeTap;
   final VoidCallback onMapTap;
   final VoidCallback onHistoryTap;
   final VoidCallback onSettingsTap;
+  final VoidCallback? onClose;
 
   const MapSections({
     super.key,
@@ -22,6 +22,7 @@ class MapSections extends StatelessWidget {
     required this.onMapTap,
     required this.onHistoryTap,
     required this.onSettingsTap,
+    this.onClose,
   });
 
   @override
@@ -51,9 +52,7 @@ class MapSections extends StatelessWidget {
               ),
               IconButton(
                 icon: const Icon(Icons.close_rounded, color: Colors.white),
-                onPressed: () {
-                  //cuadrar el cerrar
-                },
+                onPressed: onClose,
               ),
             ],
           ),

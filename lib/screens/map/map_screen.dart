@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/alert_message_model.dart';
 import '../../providers/map_state_provider.dart';
+import '../../providers/navigation_provider.dart';
 import 'fab_gps_button.dart';
 import 'map_controller.dart';
 import 'map_sections.dart';
@@ -52,13 +53,22 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
             children: [
               MapSections(
                 alerts: alerts,
-                onHomeTap: () {
-                  // Puedes eliminar si no usas los botones
-                },
+                allAlerts: context.read<MapStateProvider>().alerts,
+                onHomeTap: () {},
                 onMapTap: () {},
                 onHistoryTap: () {},
                 onSettingsTap: () {},
-                allAlerts: [],
+
+                // 👇 Esta es la clave
+                onClose: () {
+                  if (widget.specificAlerts != null) {
+                    Navigator.of(context).pop(); // Cierra pantalla completa
+                  } else {
+                    context
+                        .read<NavigationProvider>()
+                        .goBack(); // volvemos a la anterior pestaña del footer
+                  }
+                },
               ),
               const FabGpsButton(),
             ],
