@@ -41,7 +41,7 @@ class MapWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: FlutterMap(
-        mapController: mapState.mapController,
+        mapController: mapState.animatedMapController.mapController,
         options: MapOptions(
           initialCenter: mapState.userLocation ?? const LatLng(4.236479, -72.708779),
           initialZoom: 2.0,
