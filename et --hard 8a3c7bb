@@ -1,0 +1,32 @@
+[33mb227f15[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/access_location-and-refactoring_code[m[33m)[m HEAD@{0}: reset: moving to HEAD~1
+[33m8a3c7bb[m HEAD@{1}: commit: Refactored home screen
+[33mb227f15[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfeature/access_location-and-refactoring_code[m[33m)[m HEAD@{2}: commit: StreamBuilder<AlertMessage> to first simulate realtime incoming alerts
+[33maad28dd[m[33m ([m[1;31morigin/feature/access_location-and-refactoring_code[m[33m)[m HEAD@{3}: commit: location access and ubication in map done
+[33m3fbeab1[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{4}: checkout: moving from master to feature/access_location-and-refactoring_code
+[33m3fbeab1[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m HEAD@{5}: merge origin/master: Fast-forward
+[33m7d6d1a3[m HEAD@{6}: checkout: moving from feature/new_screens to master
+[33mfaa9f24[m[33m ([m[1;31morigin/feature/new_screens[m[33m, [m[1;32mfeature/new_screens[m[33m)[m HEAD@{7}: commit: UI base done
+[33m3b7d1f2[m HEAD@{8}: commit: New looks for screens
+[33mafabacf[m HEAD@{9}: commit: new look for alert_detail_screen.dart v2
+[33m4d0817f[m HEAD@{10}: commit: new look for alerts_list_screen.dart
+[33mc9362e0[m HEAD@{11}: commit: new look for home_screen.dart
+[33m996f1d9[m HEAD@{12}: commit: changes on alerts_list_screen.dart
+[33me9659d9[m HEAD@{13}: commit: home screen, map screen and alert_detail_screen.dart improved
+[33mec0c8ca[m HEAD@{14}: commit: HomeScreen with flutter_map instead of google_flutter_map to manage offline later
+[33m2e8e002[m HEAD@{15}: commit: HomeScreen mejorada
+[33m9cb88ca[m HEAD@{16}: commit: Api Key for map aplied, new homescrenn
+[33md5d427e[m HEAD@{17}: commit: internationalization languages, en and es. l10n yaml
+[33md16346c[m HEAD@{18}: commit: internationalization languages, en and es
+[33m96a0b87[m HEAD@{19}: commit: home screen and alert list created
+[33m7d6d1a3[m HEAD@{20}: checkout: moving from master to feature/new_screens
+[33m7d6d1a3[m HEAD@{21}: pull origin: Fast-forward
+[33me9bb718[m HEAD@{22}: checkout: moving from feature/json-reading to master
+[33mbe12064[m[33m ([m[1;31morigin/feature/json-reading[m[33m, [m[1;32mfeature/json-reading[m[33m)[m HEAD@{23}: commit: visual modifications on ListCards and Json atributes
+[33m32b1666[m HEAD@{24}: commit: alert screen detail
+[33mbead052[m HEAD@{25}: commit: json list of alerts
+[33mc57a52a[m HEAD@{26}: commit: base json reading
+[33me9bb718[m HEAD@{27}: Branch: renamed refs/heads/feature/new-widgets to refs/heads/feature/json-reading
+[33me9bb718[m HEAD@{29}: checkout: moving from master to feature/new-widgets
+[33me9bb718[m HEAD@{30}: commit (amend): First commit to start working
+[33mb65b7a7[m HEAD@{31}: commit (amend): First commit to start working
+[33mf2f6395[m HEAD@{32}: commit (initial): Primer commit del proyecto Flutter

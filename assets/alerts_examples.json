@@ -4,16 +4,38 @@
     "title": "Rescate en curso",
     "type": "rescue",
     "scope": "individual",
-    "target": { "mac": "00:1A:2B:3C:4D:5E" },
-    "timestamp": "2025-06-27T12:00:00Z",
+    "target": {
+      "mac": "00:1A:2B:3C:4D:5E"
+    },
+    "timestamp": "2025-07-09T12:00:00Z",
     "message": "Estamos en camino. Ruta de búsqueda comenzará en coordenadas -4.123, -69.123. Luego las demas de la lista, verifica en mapa ",
     "regions": "Acacías Meta",
     "locations": [
-      { "lat": 4.123, "lon": -74.123, "radius_km": 5 },
-      { "lat": 5.000, "lon": -75.000, "radius_km": 5 },
-      { "lat": 4.823, "lon": -74.523, "radius_km": 5 },
-      { "lat": 4.323, "lon": -74.823, "radius_km": 5 },
-      { "lat": 4.223, "lon": -74.923, "radius_km": 5 }
+      {
+        "lat": 3.9738,
+        "lon": -73.7762,
+        "radius_km": 2
+      },
+      {
+        "lat": 3.8980,
+        "lon": -73.7200,
+        "radius_km": 2
+      },
+      {
+        "lat": 3.8280,
+        "lon": -73.6650,
+        "radius_km": 2
+      },
+      {
+        "lat": 3.7550,
+        "lon": -73.6100,
+        "radius_km": 2
+      },
+      {
+        "lat": 3.6850,
+        "lon": -73.5550,
+        "radius_km": 2
+      }
     ],
     "language": "es",
     "source": "equipo_rescate_nacional",
@@ -25,10 +47,16 @@
     "type": "tsunami",
     "scope": "regional",
     "target": null,
-    "timestamp": "2025-06-29T12:05:00Z",
+    "timestamp": "2025-07-08T12:05:00Z",
     "message": "Tsunami detectado en el Pacífico. Dirígete a zonas elevadas.",
     "regions": "Guajira, Barranquilla Costa Caribe, Santa Marta, Cartagena",
-    "locations": [{ "lat": 3.42158, "lon": -76.5205, "radius_km": 50 } ],
+    "locations": [
+      {
+        "lat": 3.42158,
+        "lon": -76.5205,
+        "radius_km": 50
+      }
+    ],
     "language": "es",
     "source": "centro_alertas_oceanicas",
     "priority": "media"
@@ -39,10 +67,16 @@
     "type": "fire",
     "scope": "zonal",
     "target": null,
-    "timestamp": "2025-06-28T12:10:00Z",
+    "timestamp": "2025-07-07T12:10:00Z",
     "message": "Evacúa la zona del Parque Nacional del Chicamocha. Incendio descontrolado.",
     "regions": "Santander",
-    "locations": [{ "lat": 6.62, "lon": -73.2, "radius_km": 20 }],
+    "locations": [
+      {
+        "lat": 6.62,
+        "lon": -73.2,
+        "radius_km": 20
+      }
+    ],
     "language": "es",
     "source": "brigada_incendios",
     "priority": "media"
@@ -53,10 +87,22 @@
     "type": "earthquake",
     "scope": "Nacional",
     "target": null,
-    "timestamp": "2025-06-10T12:15:00Z",
+    "timestamp": "2025-07-07T12:15:00Z",
     "message": "Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas Sismo de magnitud 6.5 cerca de Pasto. Ten cuidado con las replicas ",
-    "regions": ["Guajira", "Barranquilla","Costa Caribe","Santa Marta", "Cartagena"],
-    "locations": [{ "lat": 1.2136, "lon": -77.2811, "radius_km": 10 }],
+    "regions": [
+      "Guajira",
+      "Barranquilla",
+      "Costa Caribe",
+      "Santa Marta",
+      "Cartagena"
+    ],
+    "locations": [
+      {
+        "lat": 1.2136,
+        "lon": -77.2811,
+        "radius_km": 10
+      }
+    ],
     "language": "es",
     "source": "servicio_sismologico",
     "priority": "critica"
@@ -70,7 +116,13 @@
     "timestamp": "2025-06-17T12:20:00Z",
     "message": "Se busca a Juan Pérez, desaparecido desde ayer en zona selvática del Vaupés.",
     "regions": "Vaupés",
-    "locations": [{ "lat": -0.5, "lon": -70.5, "radius_km": 5 }],
+    "locations": [
+      {
+        "lat": -0.5,
+        "lon": -70.5,
+        "radius_km": 5
+      }
+    ],
     "language": "es",
     "source": "equipo_busqueda",
     "priority": "alta"
@@ -84,7 +136,13 @@
     "timestamp": "2025-06-19T12:30:00Z",
     "message": "Tormentas con relámpagos y viento fuerte se aproximan a la región del Meta. Permanece en lugares seguros.",
     "regions": "Meta, Villavicencio",
-    "locations": [{ "lat": 4.15, "lon": -73.63, "radius_km": 25 }],
+    "locations": [
+      {
+        "lat": 4.15,
+        "lon": -73.63,
+        "radius_km": 25
+      }
+    ],
     "language": "es",
     "source": "instituto_meteorologico",
     "priority": "media"
@@ -98,7 +156,13 @@
     "timestamp": "2025-06-18T12:45:00Z",
     "message": "Zona con actividad armada reportada cerca de Tumaco. Punto de evacuación para las personas de las ciudades descritas.",
     "regions": "Francisco Pizarro, Shagui",
-    "locations": [{ "lat": 1.7986, "lon": -78.7482, "radius_km": 30 }],
+    "locations": [
+      {
+        "lat": 1.7986,
+        "lon": -78.7482,
+        "radius_km": 30
+      }
+    ],
     "language": "es",
     "source": "observatorio_derechos_humanos",
     "priority": "critica",
@@ -114,9 +178,21 @@
     "message": "El huracán Elsa se aproxima a la costa de Florida con vientos sostenidos de 220 km/h. Refúgiate en los centros indicados y sigue instrucciones locales.",
     "regions": "Florida, Miami, Tampa",
     "locations": [
-      { "lat": 25.7751, "lon": -80.2105, "radius_km": 2 },
-      { "lat": 27.9506, "lon": -82.4572, "radius_km": 2 },
-      { "lat": 26.1224, "lon": -80.1373, "radius_km": 2 }
+      {
+        "lat": 25.7751,
+        "lon": -80.2105,
+        "radius_km": 2
+      },
+      {
+        "lat": 27.9506,
+        "lon": -82.4572,
+        "radius_km": 2
+      },
+      {
+        "lat": 26.1224,
+        "lon": -80.1373,
+        "radius_km": 2
+      }
     ],
     "language": "es",
     "source": "centro_nacional_huracanes",
