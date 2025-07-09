@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
-import 'package:provider/provider.dart';
 import 'package:global_alert_gnss/models/alert_message_model.dart';
 import 'package:global_alert_gnss/utils/alert_utils.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:provider/provider.dart';
+
 import 'map_controller.dart';
 
 class MapWidget extends StatelessWidget {
@@ -11,9 +12,29 @@ class MapWidget extends StatelessWidget {
 
   const MapWidget({super.key, required this.alerts});
 
+  // 🔍 funcion auxiliar para centrar el mapa según la alerta o el usuario
+  LatLng getInitialCenter({
+    required List<AlertMessage> alerts,
+    required LatLng? userLocation,
+    required bool isSpecificAlert,
+  }) {
+    if (alerts.isNotEmpty && isSpecificAlert) {
+      // Centrar en la primera ubicación de la primera alerta específica
+      final firstAlert = alerts.first;
+      if (firstAlert.locations != null && firstAlert.locations!.isNotEmpty) {
+        final loc = firstAlert.locations!.first;
+        return LatLng(loc.lat, loc.lon);
+      }
+    }
+
+    // Si no es alerta específica, usar ubicación del usuario o valor por defecto
+    return userLocation ?? const LatLng(4.236479, -72.708779);
+  }
+
   @override
   Widget build(BuildContext context) {
     final mapState = Provider.of<MapControllerState>(context);
+    final isSpecificAlert = alerts.length == 1;
 
     final markers = <Marker>[
       for (var alert in alerts)
@@ -34,7 +55,11 @@ class MapWidget extends StatelessWidget {
           width: 36,
           height: 36,
           point: mapState.userLocation!,
-          child: const Icon(Icons.my_location_rounded, color: Colors.blueAccent, size: 30),
+          child: const Icon(
+            Icons.my_location_rounded,
+            color: Colors.blueAccent,
+            size: 30,
+          ),
         ),
     ];
 
@@ -43,8 +68,12 @@ class MapWidget extends StatelessWidget {
       child: FlutterMap(
         mapController: mapState.animatedMapController.mapController,
         options: MapOptions(
-          initialCenter: mapState.userLocation ?? const LatLng(4.236479, -72.708779),
-          initialZoom: 3.2,
+          initialCenter: getInitialCenter(
+            alerts: alerts,
+            userLocation: mapState.userLocation,
+            isSpecificAlert: isSpecificAlert,
+          ),
+          initialZoom: 4.2,
         ),
         children: [
           TileLayer(

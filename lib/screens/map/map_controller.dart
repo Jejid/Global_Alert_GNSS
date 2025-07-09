@@ -6,13 +6,14 @@ import 'package:latlong2/latlong.dart';
 class MapControllerState with ChangeNotifier {
   final AnimatedMapController animatedMapController;
   LatLng? _userLocation;
+  bool disableAutoMove = false;
 
   LatLng? get userLocation => _userLocation;
 
   MapControllerState({required TickerProvider vsync})
-      : animatedMapController = AnimatedMapController(vsync: vsync);
+    : animatedMapController = AnimatedMapController(vsync: vsync);
 
-  Future<void> getUserLocation() async {
+  Future<void> getUserLocation({bool animate = true}) async {
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
 
@@ -29,12 +30,15 @@ class MapControllerState with ChangeNotifier {
 
     _userLocation = LatLng(position.latitude, position.longitude);
 
-    animatedMapController.animateTo(
-      dest: _userLocation!,
-      zoom: 3.2,
-      duration: const Duration(milliseconds: 1000),
-      curve: Curves.easeInOut,
-    );
+    // ✅ Solo mover el mapa si se pide explícitamente
+    if (animate && _userLocation != null) {
+      animatedMapController.animateTo(
+        dest: _userLocation!,
+        zoom: 3.2,
+        duration: const Duration(milliseconds: 1000),
+        curve: Curves.easeInOut,
+      );
+    }
 
     notifyListeners();
   }

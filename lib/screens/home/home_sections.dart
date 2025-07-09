@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../alert_detail/alert_detail_screen.dart';
-import '../../utils/alert_utils.dart';
 import 'home_controller.dart';
 import 'home_widgets/alert_card.dart';
-import 'home_widgets/section_title.dart';
 import 'home_widgets/mini_map_preview.dart';
-
+import 'home_widgets/section_title.dart';
 
 // Organiza el contenido de la pantalla principal.
 // Usa widgets reutilizables:
@@ -56,37 +52,40 @@ class HomeSections extends StatelessWidget {
           const SectionTitle(titleKey: 'recentAlerts'),
           controller.recentAlerts.isEmpty
               ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Text(
-              loc.noRecentAlerts,
-              style: const TextStyle(color: Color(0xFF9ba1bb)),
-            ),
-          )
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text(
+                    loc.noRecentAlerts,
+                    style: const TextStyle(color: Color(0xFF9ba1bb)),
+                  ),
+                )
               : ListView.separated(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            itemCount: controller.recentAlerts.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 10),
-            itemBuilder: (context, index) {
-              final alert = controller.recentAlerts[index];
-              return AlertCard(
-                alert: alert,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => AlertDetailScreen(alert: alert,),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  itemCount: controller.recentAlerts.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    final alert = controller.recentAlerts[index];
+                    return AlertCard(
+                      alert: alert,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => AlertDetailScreen(alert: alert),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
 
           // Map Section
           const SectionTitle(titleKey: 'alertMap'),
-          MiniMapPreview(markers: controller.recentMarkers, alerts: controller.monthlyAlerts),
+          MiniMapPreview(
+            markers: controller.recentMarkers,
+            alerts: controller.monthlyAlerts,
+          ),
           const SizedBox(height: 20),
         ],
       ),
