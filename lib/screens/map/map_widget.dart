@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:global_alert_gnss/models/alert_message_model.dart';
 import 'package:global_alert_gnss/utils/alert_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/map_utils.dart';
 import 'map_controller.dart';
 
 class MapWidget extends StatelessWidget {
@@ -12,22 +14,18 @@ class MapWidget extends StatelessWidget {
 
   const MapWidget({super.key, required this.alerts});
 
-  // 🔍 funcion auxiliar para centrar el mapa según la alerta o el usuario
   LatLng getInitialCenter({
     required List<AlertMessage> alerts,
     required LatLng? userLocation,
     required bool isSpecificAlert,
   }) {
     if (alerts.isNotEmpty && isSpecificAlert) {
-      // Centrar en la primera ubicación de la primera alerta específica
       final firstAlert = alerts.first;
       if (firstAlert.locations != null && firstAlert.locations!.isNotEmpty) {
         final loc = firstAlert.locations!.first;
         return LatLng(loc.lat, loc.lon);
       }
     }
-
-    // Si no es alerta específica, usar ubicación del usuario o valor por defecto
     return userLocation ?? const LatLng(4.236479, -72.708779);
   }
 
@@ -41,8 +39,11 @@ class MapWidget extends StatelessWidget {
         if (alert.locations != null)
           for (var loc in alert.locations!)
             Marker(
-              width: 40,
-              height: 40,
+              key: ValueKey(
+                AlertMarkerKey(alert: alert, lat: loc.lat, lon: loc.lon),
+              ),
+              width: 50,
+              height: 50,
               point: LatLng(loc.lat, loc.lon),
               child: Icon(
                 Icons.location_on,
@@ -74,6 +75,7 @@ class MapWidget extends StatelessWidget {
             isSpecificAlert: isSpecificAlert,
           ),
           initialZoom: 8,
+          onTap: (_, __) => mapState.popupController.hideAllPopups(),
         ),
         children: [
           TileLayer(
@@ -81,13 +83,54 @@ class MapWidget extends StatelessWidget {
             tileProvider: NetworkTileProvider(
               headers: {
                 'User-Agent': 'GlobalAlertGNSS/1.0 (jejidnike@hotmail.com)',
-                // usa tu email o web
                 'Referer': 'https://domiyi.co',
-                // opcional pero recomendable
               },
             ),
           ),
-          MarkerLayer(markers: markers),
+          PopupMarkerLayer(
+            options: PopupMarkerLayerOptions(
+              markers: markers,
+              popupController: mapState.popupController,
+              markerCenterAnimation: const MarkerCenterAnimation(),
+              markerTapBehavior: MarkerTapBehavior.togglePopupAndHideRest(),
+              popupDisplayOptions: PopupDisplayOptions(
+                builder: (context, marker) {
+                  final key = marker.key;
+                  if (key is ValueKey<AlertMarkerKey>) {
+                    final data = key.value;
+
+                    return GestureDetector(
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamed('/alert_detail', arguments: data.alert);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        margin: const EdgeInsets.only(bottom: 6),
+                        decoration: BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          data.alert.title,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return const SizedBox();
+                },
+              ),
+            ),
+          ),
         ],
       ),
     );

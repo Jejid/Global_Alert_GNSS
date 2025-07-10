@@ -12,6 +12,7 @@ class FabGpsButton extends StatelessWidget {
       bottom: 18,
       right: 18,
       child: FloatingActionButton.small(
+        heroTag: 'userLocation',
         backgroundColor: Colors.black54,
         onPressed: () =>
             context.read<MapControllerState>().centerToUserLocation(),

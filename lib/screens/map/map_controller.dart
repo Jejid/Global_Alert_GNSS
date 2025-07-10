@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map_animations/flutter_map_animations.dart';
+import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
 class MapControllerState with ChangeNotifier {
   final AnimatedMapController animatedMapController;
+  final PopupController popupController = PopupController(); // 👈 nuevo
+
   LatLng? _userLocation;
   bool disableAutoMove = false;
 
@@ -49,5 +52,11 @@ class MapControllerState with ChangeNotifier {
     disableAutoMove = false;
     await getUserLocation();
     disableAutoMove = previous;
+  }
+
+  @override
+  void dispose() {
+    popupController.dispose(); // 👈 liberar
+    super.dispose();
   }
 }

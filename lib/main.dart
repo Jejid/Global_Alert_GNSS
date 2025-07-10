@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:global_alert_gnss/screens/alert_detail/alert_detail_screen.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as provider;
 
 import 'l10n/app_localizations.dart';
+import 'models/alert_message_model.dart';
 import 'providers/map_state_provider.dart';
 import 'providers/navigation_provider.dart';
 import 'screens/main_screen.dart';
@@ -48,7 +50,15 @@ class GlobalAlertApp extends StatelessWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: const MainScreen(),
+      onGenerateRoute: (settings) {
+        if (settings.name == '/alert_detail') {
+          final alert = settings.arguments as AlertMessage;
+          return MaterialPageRoute(
+            builder: (_) => AlertDetailScreen(alert: alert),
+          );
+        }
+        return MaterialPageRoute(builder: (_) => const MainScreen());
+      },
     );
   }
 }
