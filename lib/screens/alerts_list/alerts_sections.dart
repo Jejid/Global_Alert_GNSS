@@ -80,6 +80,7 @@ class _AlertsSectionsState extends State<AlertsSections> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: TextField(
+                  autofocus: false,
                   onChanged: controller.updateSearch,
                   style: const TextStyle(color: Colors.white),
                   cursorColor: Colors.white,
@@ -103,6 +104,9 @@ class _AlertsSectionsState extends State<AlertsSections> {
 
                             // ✅ Cargar las alertas filtradas o todas
                             mapState.setAlerts(filtered);
+
+                            // ✅ Esperamos al siguiente frame, y luego movemos el mapa
+                            mapState.triggerCenterOnAlerts();
 
                             // ✅ Cambiar la pestaña al mapa
                             nav.setIndex(1);

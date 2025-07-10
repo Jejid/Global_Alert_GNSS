@@ -4,6 +4,9 @@ import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../models/alert_message_model.dart';
+import '../../utils/map_utils.dart';
+
 class MapControllerState with ChangeNotifier {
   final AnimatedMapController animatedMapController;
   final PopupController popupController = PopupController(); // 👈 nuevo
@@ -17,7 +20,7 @@ class MapControllerState with ChangeNotifier {
     : animatedMapController = AnimatedMapController(vsync: vsync);
 
   Future<void> getUserLocation() async {
-    bool animate = !disableAutoMove;
+    bool shoulAnimate = !disableAutoMove;
 
     bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) return;
@@ -35,7 +38,7 @@ class MapControllerState with ChangeNotifier {
 
     _userLocation = LatLng(position.latitude, position.longitude);
 
-    if (animate && _userLocation != null) {
+    if (shoulAnimate && _userLocation != null) {
       animatedMapController.animateTo(
         dest: _userLocation!,
         zoom: 4,
@@ -52,6 +55,21 @@ class MapControllerState with ChangeNotifier {
     disableAutoMove = false;
     await getUserLocation();
     disableAutoMove = previous;
+  }
+
+  void moveToAlertsArea(List<AlertMessage> alerts) {
+    final coords = getAllCoordinates(alerts);
+    final center = calculateCenter(coords);
+    final zoom = calculateZoomFromAlerts(alerts);
+
+    if (coords.isNotEmpty) {
+      animatedMapController.animateTo(
+        dest: center,
+        zoom: zoom,
+        duration: const Duration(milliseconds: 1200),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   @override

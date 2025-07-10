@@ -24,25 +24,57 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+
     final mapStateProvider = context.read<MapStateProvider>();
-    if (mapStateProvider.alerts.isEmpty) {
-      AlertUtils.getAllAlerts().then((alerts) {
-        mapStateProvider.setAlerts(alerts);
-      });
-    }
+    final alertsToUse = widget.specificAlerts ?? mapStateProvider.alerts;
 
     mapControllerState = MapControllerState(vsync: this);
 
-    // ✅ Desactiva el movimiento si viene con alertas específicas
+    // ✅ Desactiva auto-move si viene desde otra pantalla (pasando alertas)
     mapControllerState.disableAutoMove = widget.specificAlerts != null;
 
-    mapControllerState.getUserLocation();
+    // ✅ Si viene con alertas específicas, mover la cámara a ellas
+    if (widget.specificAlerts != null && alertsToUse.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        mapControllerState.moveToAlertsArea(alertsToUse);
+      });
+    } else {
+      // Si no viene con alertas específicas, usar ubicación del usuario
+      if (mapStateProvider.alerts.isEmpty) {
+        AlertUtils.getAllAlerts().then((alerts) {
+          mapStateProvider.setAlerts(alerts);
+          mapControllerState.getUserLocation();
+        });
+      } else {
+        mapControllerState.getUserLocation();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final navIndex = context.watch<NavigationProvider>().currentIndex;
+
+    if (navIndex == 1) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).unfocus();
+      });
+    }
+
     final alerts =
         widget.specificAlerts ?? context.watch<MapStateProvider>().alerts;
+
+    final mapState = context.watch<MapStateProvider>();
+
+    if (mapState.shouldCenterOnAlerts) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final alertsToUse = widget.specificAlerts ?? mapState.alerts;
+        if (alertsToUse.isNotEmpty) {
+          mapControllerState.moveToAlertsArea(alertsToUse);
+        }
+        mapState.clearCenterFlag(); // 👈 Limpia el flag después de usarlo
+      });
+    }
 
     return ChangeNotifierProvider.value(
       value: mapControllerState,

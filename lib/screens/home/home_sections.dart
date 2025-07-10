@@ -5,7 +5,6 @@ import '../alert_detail/alert_detail_screen.dart';
 import 'home_controller.dart';
 import 'home_widgets/alert_card.dart';
 import 'home_widgets/mini_map_preview.dart';
-import 'home_widgets/section_title.dart';
 
 // Organiza el contenido de la pantalla principal.
 // Usa widgets reutilizables:
@@ -49,7 +48,26 @@ class HomeSections extends StatelessWidget {
           ),
 
           // Recent Alerts
-          const SectionTitle(titleKey: 'recentAlerts'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
+            child: Row(
+              children: [
+                Text(
+                  loc.recentAlerts,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                const Text(
+                  '(Last 3 days)',
+                  style: TextStyle(color: Color(0xFF9ba1bb), fontSize: 13),
+                ),
+              ],
+            ),
+          ),
           controller.recentAlerts.isEmpty
               ? Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -81,10 +99,30 @@ class HomeSections extends StatelessWidget {
                 ),
 
           // Map Section
-          const SectionTitle(titleKey: 'alertMap'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 24, 20, 8),
+            child: Row(
+              children: [
+                Text(
+                  loc.alertMap,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Spacer(),
+                const Text(
+                  '(Last 3 days)',
+                  style: TextStyle(color: Color(0xFF9ba1bb), fontSize: 13),
+                ),
+              ],
+            ),
+          ),
           MiniMapPreview(
             markers: controller.recentMarkers,
-            alerts: controller.monthlyAlerts,
+            alerts: controller
+                .recentAlerts, // aquí se pasa la lista de alertas a MiniMapPreview
           ),
           const SizedBox(height: 20),
         ],

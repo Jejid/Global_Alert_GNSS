@@ -21,7 +21,7 @@ class MiniMapPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final coords = getAllCoordinates(alerts);
     final center = calculateCenter(coords);
-    final zoom = calculateZoom(coords);
+    final zoom = calculateZoomFromAlerts(alerts);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -31,14 +31,18 @@ class MiniMapPreview extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              Provider.of<MapStateProvider>(
+              final mapState = Provider.of<MapStateProvider>(
                 context,
                 listen: false,
-              ).setAlerts(alerts);
-              Provider.of<NavigationProvider>(
+              );
+              final nav = Provider.of<NavigationProvider>(
                 context,
                 listen: false,
-              ).setIndex(1);
+              );
+
+              mapState.setAlerts(alerts); // Envía las alertas mensuales
+              mapState.triggerCenterOnAlerts(); // Activa el centrado automático
+              nav.setIndex(1); // Cambia a la pestaña del mapa
             },
             child: SizedBox(
               height: 200,

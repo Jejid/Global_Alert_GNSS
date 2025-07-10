@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:global_alert_gnss/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
+import '../../providers/navigation_provider.dart';
 import 'home_controller.dart';
 import 'home_sections.dart';
 
@@ -12,9 +14,9 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   late final HomeController _controller;
-
 
   @override
   void initState() {
@@ -33,6 +35,14 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
+    final navIndex = context.watch<NavigationProvider>().currentIndex;
+
+    if (navIndex == 0) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        FocusScope.of(context).unfocus();
+      });
+    }
+
     final loc = AppLocalizations.of(context)!;
 
     return Scaffold(

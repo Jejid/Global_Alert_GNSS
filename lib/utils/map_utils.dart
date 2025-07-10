@@ -41,29 +41,48 @@ LatLng calculateCenter(List<LatLng> coords) {
   return LatLng(totalLat / coords.length, totalLng / coords.length);
 }
 
-/// Calcula un nivel de zoom estimado basado en la dispersión
-double calculateZoom(List<LatLng> coords) {
-  if (coords.length <= 1) return 5;
+/// Calcula un nivel de zoom adecuado, usando el radio cuando hay
+/// una sola ubicación, o la dispersión si son varias.
+double calculateZoomFromAlerts(List<AlertMessage> alerts) {
+  // Extrae todas las ubicaciones
+  final allLocs = alerts.expand((a) => a.locations ?? []).toList();
 
-  double minLat = coords.first.latitude;
-  double maxLat = coords.first.latitude;
-  double minLng = coords.first.longitude;
-  double maxLng = coords.first.longitude;
+  // Si no hay ubicaciones, zoom base
+  if (allLocs.isEmpty) return 4;
 
-  for (var coord in coords) {
-    minLat = minLat < coord.latitude ? minLat : coord.latitude;
-    maxLat = maxLat > coord.latitude ? maxLat : coord.latitude;
-    minLng = minLng < coord.longitude ? minLng : coord.longitude;
-    maxLng = maxLng > coord.longitude ? maxLng : coord.longitude;
+  // Si sólo hay una ubicación, ajusta zoom según el radiusKm
+  if (allLocs.length == 1) {
+    final r = allLocs.first.radiusKm;
+    if (r < 0.5) return 13;
+    if (r < 2) return 12;
+    if (r < 5) return 10;
+    if (r < 20) return 8;
+    if (r < 80) return 6;
+    return 4; // area muy grande
+  }
+
+  // Si son múltiples, calcula bounding box
+  double minLat = allLocs.first.lat, maxLat = allLocs.first.lat;
+  double minLng = allLocs.first.lon, maxLng = allLocs.first.lon;
+
+  for (var loc in allLocs) {
+    if (loc.lat < minLat) minLat = loc.lat;
+    if (loc.lat > maxLat) maxLat = loc.lat;
+    if (loc.lon < minLng) minLng = loc.lon;
+    if (loc.lon > maxLng) maxLng = loc.lon;
   }
 
   final latDiff = maxLat - minLat;
   final lngDiff = maxLng - minLng;
   final maxDiff = latDiff > lngDiff ? latDiff : lngDiff;
 
-  if (maxDiff < 0.5) return 10;
+  // Umbrales suaves para múltiples puntos
+  if (maxDiff < 0.1) return 11;
+  if (maxDiff < 0.3) return 10;
+  if (maxDiff < 0.7) return 9;
   if (maxDiff < 1.5) return 8;
-  if (maxDiff < 4) return 6;
-  if (maxDiff < 10) return 4;
-  return 2;
+  if (maxDiff < 3.0) return 7;
+  if (maxDiff < 6.0) return 6;
+  if (maxDiff < 10.0) return 5;
+  return 4;
 }
