@@ -87,7 +87,41 @@ class _AlertsSectionsState extends State<AlertsSections> {
                     hintText: loc.searchAlerts,
                     hintStyle: const TextStyle(color: Color(0xFF9ba1bb)),
                     border: InputBorder.none,
-                    prefixIcon: const Icon(Icons.search, color: Color(0xFF9ba1bb)),
+                    prefixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(width: 8),
+                        const Icon(Icons.search, color: Color(0xFF9ba1bb)),
+                        const SizedBox(width: 8),
+                        GestureDetector(
+                          onTap: () {
+                            final controller = context.read<AlertsController>();
+                            final nav = context.read<NavigationProvider>();
+                            final mapState = context.read<MapStateProvider>();
+
+                            final filtered = controller.filteredAlerts;
+
+                            // ✅ Cargar las alertas filtradas o todas
+                            mapState.setAlerts(filtered);
+
+                            // ✅ Cambiar la pestaña al mapa
+                            nav.setIndex(1);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF2C3244),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: const Icon(
+                              Icons.map,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                 ),
@@ -95,9 +129,7 @@ class _AlertsSectionsState extends State<AlertsSections> {
             ),
 
             // List
-            Expanded(
-              child: AlertsList(alerts: controller.filteredAlerts),
-            ),
+            Expanded(child: AlertsList(alerts: controller.filteredAlerts)),
           ],
         ),
       ),

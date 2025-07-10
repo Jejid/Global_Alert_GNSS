@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import '../../models/alert_message_model.dart';
 import '../../providers/map_state_provider.dart';
 import '../../providers/navigation_provider.dart';
-import 'fab_gps_button.dart';
 import 'map_controller.dart';
 import 'map_sections.dart';
+import 'user_gps_button.dart';
 
 class MapScreen extends StatefulWidget {
   final List<AlertMessage>?
@@ -70,7 +70,7 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                   }
                 },
               ),
-              const FabGpsButton(),
+              const UserGpsButton(),
               Positioned(
                 right: 18,
                 bottom: 80, // un poco encima del GPS

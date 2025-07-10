@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import 'map_controller.dart';
 
-class FabGpsButton extends StatelessWidget {
-  const FabGpsButton({super.key});
+class UserGpsButton extends StatelessWidget {
+  const UserGpsButton({super.key});
 
   @override
   Widget build(BuildContext context) {
