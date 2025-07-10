@@ -9,7 +9,7 @@ class FabGpsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 16,
+      bottom: 18,
       right: 18,
       child: FloatingActionButton.small(
         backgroundColor: Colors.black54,

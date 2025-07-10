@@ -71,6 +71,37 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
                 },
               ),
               const FabGpsButton(),
+              Positioned(
+                right: 18,
+                bottom: 80, // un poco encima del GPS
+                child: Column(
+                  children: [
+                    FloatingActionButton.small(
+                      heroTag: 'zoomIn',
+                      backgroundColor: Colors.black54,
+                      onPressed: () {
+                        final map = mapControllerState
+                            .animatedMapController
+                            .mapController;
+                        map.move(map.camera.center, map.camera.zoom + 1);
+                      },
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                    const SizedBox(height: 1),
+                    FloatingActionButton.small(
+                      heroTag: 'zoomOut',
+                      backgroundColor: Colors.black54,
+                      onPressed: () {
+                        final map = mapControllerState
+                            .animatedMapController
+                            .mapController;
+                        map.move(map.camera.center, map.camera.zoom - 1);
+                      },
+                      child: const Icon(Icons.remove, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

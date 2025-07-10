@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+
 import '../../models/alert_message_model.dart';
 import '../../utils/alert_utils.dart';
-
 
 //gestión de alertas y animación
 // Este controlador encapsula lógica, animación y datos.
 class HomeController with ChangeNotifier {
-
   late final AnimationController animController;
   late final Animation<double> fadeIn;
 
@@ -17,7 +16,10 @@ class HomeController with ChangeNotifier {
   List<Marker> recentMarkers = [];
 
   HomeController({required TickerProvider vsync}) {
-    animController = AnimationController(vsync: vsync, duration: const Duration(milliseconds: 800));
+    animController = AnimationController(
+      vsync: vsync,
+      duration: const Duration(milliseconds: 800),
+    );
     fadeIn = CurvedAnimation(parent: animController, curve: Curves.easeIn);
   }
 
@@ -37,7 +39,9 @@ class HomeController with ChangeNotifier {
     final markers = <Marker>[];
 
     for (final alert in allAlerts) {
-      if (alert.timestamp.isAfter(thirtyDaysAgo) && alert.locations != null && alert.locations!.isNotEmpty) {
+      if (alert.timestamp.isAfter(thirtyDaysAgo) &&
+          alert.locations != null &&
+          alert.locations!.isNotEmpty) {
         month.add(alert);
 
         if (alert.timestamp.isAfter(threeDaysAgo)) {
@@ -66,6 +70,7 @@ class HomeController with ChangeNotifier {
 
   @override
   void dispose() {
+    super.dispose();
     animController.dispose();
   }
 }
