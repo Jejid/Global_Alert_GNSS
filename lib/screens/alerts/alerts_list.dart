@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+
 import '../../models/alert_message_model.dart';
-import '../alert_detail/alert_detail_screen.dart';
 import 'alert_card.dart';
 
 class AlertsList extends StatelessWidget {
@@ -26,12 +26,7 @@ class AlertsList extends StatelessWidget {
         final alert = alerts[index];
         return GestureDetector(
           onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => AlertDetailScreen(alert: alert),
-              ),
-            );
+            Navigator.pushNamed(context, '/alert_detail', arguments: alert);
           },
           child: AlertCard(alert: alert),
         );

@@ -96,37 +96,64 @@ class MapWidget extends StatelessWidget {
               popupDisplayOptions: PopupDisplayOptions(
                 builder: (context, marker) {
                   final key = marker.key;
-                  if (key is ValueKey<AlertMarkerKey>) {
-                    final data = key.value;
+                  final raw = key is ValueKey<AlertMarkerKey>
+                      ? key.value
+                      : null;
 
-                    return GestureDetector(
-                      onTap: () {
-                        Navigator.of(
-                          context,
-                        ).pushNamed('/alert_detail', arguments: data.alert);
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        margin: const EdgeInsets.only(bottom: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.black87,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Text(
-                          data.alert.title,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                          ),
-                        ),
+                  if (raw == null) return const SizedBox();
+
+                  final alert = raw.alert;
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context,
+                        '/alert_detail',
+                        arguments: alert,
+                      );
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 6,
                       ),
-                    );
-                  }
-
-                  return const SizedBox();
+                      margin: const EdgeInsets.only(bottom: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.black87,
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black45,
+                            blurRadius: 4,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            AlertUtils.getIconLucid(alert.type),
+                            color: AlertUtils.getAlertColor(alert.type),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 6),
+                          Flexible(
+                            child: Text(
+                              alert.title,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                                fontFamily: 'Roboto',
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
                 },
               ),
             ),
