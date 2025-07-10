@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/map_state_provider.dart';
 import '../../../../providers/navigation_provider.dart';
 import '../../../models/alert_message_model.dart';
+import '../../../utils/map_utils.dart';
 
 class MiniMapPreview extends StatelessWidget {
   final List<Marker> markers;
@@ -19,6 +19,10 @@ class MiniMapPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final coords = getAllCoordinates(alerts);
+    final center = calculateCenter(coords);
+    final zoom = calculateZoom(coords);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: ClipRRect(
@@ -27,13 +31,10 @@ class MiniMapPreview extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: () {
-              // ✅ Enviar los mismos alerts que se usaron en el minimapa
               Provider.of<MapStateProvider>(
                 context,
                 listen: false,
               ).setAlerts(alerts);
-
-              // ✅ Cambiar a la pestaña del mapa (índice 1) usando NavigationProvider
               Provider.of<NavigationProvider>(
                 context,
                 listen: false,
@@ -45,10 +46,10 @@ class MiniMapPreview extends StatelessWidget {
                 ignoring: true,
                 child: FlutterMap(
                   options: MapOptions(
-                    initialCenter: const LatLng(4.236479, -72.708779),
-                    initialZoom: 2,
+                    initialCenter: center,
+                    initialZoom: zoom,
                     interactionOptions: const InteractionOptions(
-                      flags: ~InteractiveFlag.all, // Desactiva interacciones
+                      flags: ~InteractiveFlag.all,
                     ),
                   ),
                   children: [
@@ -59,9 +60,7 @@ class MiniMapPreview extends StatelessWidget {
                         headers: {
                           'User-Agent':
                               'GlobalAlertGNSS/1.0 (jejidnike@hotmail.com)',
-                          // usa tu email o web
                           'Referer': 'https://domiyi.co',
-                          // opcional pero recomendable
                         },
                       ),
                     ),
