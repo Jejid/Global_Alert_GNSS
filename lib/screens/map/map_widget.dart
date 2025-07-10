@@ -78,7 +78,14 @@ class MapWidget extends StatelessWidget {
         children: [
           TileLayer(
             urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.example.app',
+            tileProvider: NetworkTileProvider(
+              headers: {
+                'User-Agent': 'GlobalAlertGNSS/1.0 (jejidnike@hotmail.com)',
+                // usa tu email o web
+                'Referer': 'https://domiyi.co',
+                // opcional pero recomendable
+              },
+            ),
           ),
           MarkerLayer(markers: markers),
         ],

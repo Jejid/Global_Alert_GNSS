@@ -64,6 +64,7 @@ class HomeController with ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void dispose() {
     animController.dispose();
   }

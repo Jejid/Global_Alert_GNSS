@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../../models/alert_message_model.dart';
-import '../../utils/alert_utils.dart';
 import '../alert_detail/alert_detail_screen.dart';
 import 'alert_card.dart';
 

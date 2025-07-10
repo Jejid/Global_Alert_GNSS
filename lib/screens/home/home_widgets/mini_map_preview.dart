@@ -3,9 +3,9 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
-import '../../../models/alert_message_model.dart';
-import '../../../../providers/navigation_provider.dart';
 import '../../../../providers/map_state_provider.dart';
+import '../../../../providers/navigation_provider.dart';
+import '../../../models/alert_message_model.dart';
 
 class MiniMapPreview extends StatelessWidget {
   final List<Marker> markers;
@@ -28,10 +28,16 @@ class MiniMapPreview extends StatelessWidget {
           child: InkWell(
             onTap: () {
               // ✅ Enviar los mismos alerts que se usaron en el minimapa
-              Provider.of<MapStateProvider>(context, listen: false).setAlerts(alerts);
+              Provider.of<MapStateProvider>(
+                context,
+                listen: false,
+              ).setAlerts(alerts);
 
               // ✅ Cambiar a la pestaña del mapa (índice 1) usando NavigationProvider
-              Provider.of<NavigationProvider>(context, listen: false).setIndex(1);
+              Provider.of<NavigationProvider>(
+                context,
+                listen: false,
+              ).setIndex(1);
             },
             child: SizedBox(
               height: 200,
@@ -47,8 +53,17 @@ class MiniMapPreview extends StatelessWidget {
                   ),
                   children: [
                     TileLayer(
-                      urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      userAgentPackageName: 'com.example.app',
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      tileProvider: NetworkTileProvider(
+                        headers: {
+                          'User-Agent':
+                              'GlobalAlertGNSS/1.0 (jejidnike@hotmail.com)',
+                          // usa tu email o web
+                          'Referer': 'https://domiyi.co',
+                          // opcional pero recomendable
+                        },
+                      ),
                     ),
                     MarkerLayer(markers: markers),
                   ],

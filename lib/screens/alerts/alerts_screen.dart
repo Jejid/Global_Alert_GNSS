@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../models/alert_message_model.dart';
 import '../../services/gnss_stream_service.dart';
 import 'alerts_controller.dart';
 import 'alerts_sections.dart';

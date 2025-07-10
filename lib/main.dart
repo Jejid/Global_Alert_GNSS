@@ -1,14 +1,14 @@
 import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_map_tile_caching/flutter_map_tile_caching.dart';
-import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart' as provider;
 
 import 'l10n/app_localizations.dart';
-import 'providers/navigation_provider.dart';
 import 'providers/map_state_provider.dart';
+import 'providers/navigation_provider.dart';
 import 'screens/main_screen.dart';
 
 void main() async {
@@ -41,17 +41,14 @@ class GlobalAlertApp extends StatelessWidget {
         primaryColor: Colors.deepPurple,
         scaffoldBackgroundColor: Colors.black54,
       ),
-      supportedLocales: const [
-        Locale('en'),
-        Locale('es'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('es')],
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      home: const MainScreen(), // <--- Ya no HomeScreen
+      home: const MainScreen(),
     );
   }
 }
