@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
 import '../../models/alert_message_model.dart';
+import '../../models/map_entry_source.dart';
+import '../../providers/map_state_provider.dart';
 import '../../utils/alert_utils.dart';
 import '../map/map_screen.dart';
 import 'alert_detail_card.dart';
@@ -51,6 +54,12 @@ class AlertDetailSections extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton.icon(
                 onPressed: () {
+                  // 🔁 Establece el origen de navegación antes de abrir el mapa
+                  Provider.of<MapStateProvider>(
+                    context,
+                    listen: false,
+                  ).setEntrySource(MapEntrySource.fromDetail);
+
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -58,6 +67,7 @@ class AlertDetailSections extends StatelessWidget {
                     ),
                   );
                 },
+
                 icon: const Icon(Icons.map_rounded, size: 20),
                 label: Text(loc.lookInMap),
                 style: ElevatedButton.styleFrom(

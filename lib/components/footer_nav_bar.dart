@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../providers/navigation_provider.dart';
+
 import '../l10n/app_localizations.dart';
+import '../models/map_entry_source.dart';
+import '../providers/map_state_provider.dart';
+import '../providers/navigation_provider.dart';
 
 class FooterNavBar extends StatelessWidget {
   const FooterNavBar({super.key});
@@ -28,7 +31,13 @@ class FooterNavBar extends StatelessWidget {
             icon: Icons.map_rounded,
             label: loc.alertMap,
             isActive: currentIndex == 1,
-            onTap: () => provider.setIndex(1),
+            onTap: () {
+              final mapState = context.read<MapStateProvider>();
+              mapState.setEntrySource(
+                MapEntrySource.fromFooter,
+              ); // 👈 Indicar fuente
+              provider.setIndex(1); // Cambiar a pestaña del mapa
+            },
           ),
           _buildFooterButton(
             icon: Icons.history_rounded,

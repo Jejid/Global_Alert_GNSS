@@ -3,6 +3,7 @@ import 'package:global_alert_gnss/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/alert_message_model.dart';
+import '../../models/map_entry_source.dart';
 import '../../providers/map_state_provider.dart';
 import '../../providers/navigation_provider.dart';
 import 'map_controller.dart';
@@ -26,29 +27,45 @@ class _MapScreenState extends State<MapScreen> with TickerProviderStateMixin {
     super.initState();
 
     final mapStateProvider = context.read<MapStateProvider>();
+    final entrySource = mapStateProvider.entrySource;
     final alertsToUse = widget.specificAlerts ?? mapStateProvider.alerts;
 
     mapControllerState = MapControllerState(vsync: this);
 
-    // ✅ Desactiva auto-move si viene desde otra pantalla (pasando alertas)
+    // Desactiva movimiento automático si se pasa por parámetro
     mapControllerState.disableAutoMove = widget.specificAlerts != null;
 
-    // ✅ Si viene con alertas específicas, mover la cámara a ellas
-    if (widget.specificAlerts != null && alertsToUse.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      // ✅ CASO 1: desde otra pantalla con alertas específicas
+      if (widget.specificAlerts != null && alertsToUse.isNotEmpty) {
         mapControllerState.moveToAlertsArea(alertsToUse);
-      });
-    } else {
-      // Si no viene con alertas específicas, usar ubicación del usuario
-      if (mapStateProvider.alerts.isEmpty) {
-        AlertUtils.getAllAlerts().then((alerts) {
-          mapStateProvider.setAlerts(alerts);
-          mapControllerState.getUserLocation();
-        });
-      } else {
+        return;
+      }
+
+      // ✅ CASO 2: desde el MiniMapa
+      if (entrySource == MapEntrySource.fromMiniMap) {
+        if (alertsToUse.isNotEmpty) {
+          mapControllerState.moveToAlertsArea(alertsToUse);
+        }
+      }
+      // ✅ CASO 3: desde el botón de lista
+      else if (entrySource == MapEntrySource.fromAlertsButton) {
+        if (alertsToUse.isNotEmpty) {
+          mapControllerState.moveToAlertsArea(alertsToUse);
+        }
+      }
+      // ✅ CASO 4: entrada libre desde el footer
+      else if (entrySource == MapEntrySource.fromFooter) {
+        if (alertsToUse.isEmpty) {
+          final allAlerts = await AlertUtils.getAllAlerts();
+          mapStateProvider.setAlerts(allAlerts);
+        }
         mapControllerState.getUserLocation();
       }
-    }
+
+      // 🧹 Limpiar el entry source después de usarlo
+      mapStateProvider.setEntrySource(MapEntrySource.unknown);
+    });
   }
 
   @override

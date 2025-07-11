@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../l10n/app_localizations.dart';
+import '../../models/map_entry_source.dart';
 import '../../providers/map_state_provider.dart';
 import '../../providers/navigation_provider.dart';
 import 'alerts_controller.dart';
@@ -29,8 +30,21 @@ class _AlertsSectionsState extends State<AlertsSections> {
 
     if (_lastIndex != currentIndex) {
       if (currentIndex == 1) {
-        mapProvider.setAlerts(controller.filteredAlerts);
+        final source = mapProvider.entrySource;
+
+        if (source == MapEntrySource.unknown ||
+            source == MapEntrySource.fromFooter) {
+          // Si se accede desde el footer sin fuente específica,
+          // no actualizamos las alertas. Se usan las que ya tenga el MapState.
+        } else {
+          // En caso de fuentes conocidas (como desde botón o mini mapa),
+          // las alertas ya se setearon antes de cambiar de pestaña.
+        }
+
+        // Luego de mostrar el mapa, podemos resetear el entrySource a unknown
+        mapProvider.setEntrySource(MapEntrySource.unknown);
       }
+
       _lastIndex = currentIndex;
     }
   }
@@ -102,7 +116,12 @@ class _AlertsSectionsState extends State<AlertsSections> {
 
                           final filtered = controller.filteredAlerts;
 
-                          // ✅ Cargar las alertas filtradas o todas
+                          // ✅ Indicar que se entra al mapa desde el botón de la lista de alertas
+                          mapState.setEntrySource(
+                            MapEntrySource.fromAlertsButton,
+                          );
+
+                          // ✅ Cargar las alertas filtradas
                           mapState.setAlerts(filtered);
 
                           // ✅ Esperamos al siguiente frame, y luego movemos el mapa

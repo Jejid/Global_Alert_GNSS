@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../providers/map_state_provider.dart';
 import '../../../../providers/navigation_provider.dart';
 import '../../../models/alert_message_model.dart';
+import '../../../models/map_entry_source.dart';
 import '../../../utils/map_utils.dart';
 
 class MiniMapPreview extends StatelessWidget {
@@ -40,10 +41,16 @@ class MiniMapPreview extends StatelessWidget {
                 listen: false,
               );
 
-              mapState.setAlerts(alerts); // Envía las alertas mensuales
-              mapState.triggerCenterOnAlerts(); // Activa el centrado automático
-              nav.setIndex(1); // Cambia a la pestaña del mapa
+              mapState.setAlerts(
+                alerts,
+              ); // 🛰️ Carga las alertas recientes del minimapa
+              mapState.setEntrySource(
+                MapEntrySource.fromMiniMap,
+              ); // 👈 Muy importante
+              mapState.triggerCenterOnAlerts(); // 🎯 Centrarse en ellas
+              nav.setIndex(1); // 🔄 Cambia a la pestaña de mapa
             },
+
             child: SizedBox(
               height: 200,
               child: IgnorePointer(
