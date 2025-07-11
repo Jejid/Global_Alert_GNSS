@@ -1,6 +1,17 @@
 name: global_alert_gnss
 description: "Humanitarian global GNSS alerts"
 
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon.png"
+
+flutter_native_splash:
+  color: "#14161F"
+  image: assets/app_icon.png
+  android: true
+  ios: false
+
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 
@@ -36,9 +47,12 @@ flutter:
     - assets/alerts_examples.json
 
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.13.1
+  flutter_native_splash: ^2.3.8
 
   flutter_lints: ^6.0.0
 

@@ -45,10 +45,13 @@ class MapWidget extends StatelessWidget {
               width: 50,
               height: 50,
               point: LatLng(loc.lat, loc.lon),
-              child: Icon(
-                Icons.location_on,
-                color: AlertUtils.getAlertColor(alert.type),
-                size: 32,
+              child: Transform.translate(
+                offset: const Offset(0, -14), // Ajusta para alinear visualmente
+                child: Icon(
+                  Icons.location_on,
+                  color: AlertUtils.getAlertColor(alert.type),
+                  size: 32,
+                ),
               ),
             ),
       if (mapState.userLocation != null)
@@ -62,6 +65,23 @@ class MapWidget extends StatelessWidget {
             size: 30,
           ),
         ),
+    ];
+
+    final circles = <CircleMarker>[
+      for (var alert in alerts)
+        if (alert.locations != null)
+          for (var loc in alert.locations!)
+            CircleMarker(
+              point: LatLng(loc.lat, loc.lon),
+              radius: loc.radiusKm * 1000,
+              // en metros
+              useRadiusInMeter: true,
+              color: AlertUtils.getAlertColor(alert.type).withOpacity(0.35),
+              borderColor: AlertUtils.getAlertColor(
+                alert.type,
+              ).withOpacity(0.50),
+              borderStrokeWidth: 1.5,
+            ),
     ];
 
     return ClipRRect(
@@ -87,6 +107,11 @@ class MapWidget extends StatelessWidget {
               },
             ),
           ),
+
+          // 🔵 Círculos con el radio de cada alerta
+          CircleLayer(circles: circles),
+
+          // 📍 Marcadores con popups
           PopupMarkerLayer(
             options: PopupMarkerLayerOptions(
               markers: markers,

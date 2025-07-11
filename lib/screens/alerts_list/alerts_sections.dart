@@ -88,43 +88,42 @@ class _AlertsSectionsState extends State<AlertsSections> {
                     hintText: loc.searchAlerts,
                     hintStyle: const TextStyle(color: Color(0xFF9ba1bb)),
                     border: InputBorder.none,
-                    prefixIcon: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const SizedBox(width: 8),
-                        const Icon(Icons.search, color: Color(0xFF9ba1bb)),
-                        const SizedBox(width: 8),
-                        GestureDetector(
-                          onTap: () {
-                            final controller = context.read<AlertsController>();
-                            final nav = context.read<NavigationProvider>();
-                            final mapState = context.read<MapStateProvider>();
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.only(left: 12, right: 8),
+                      child: Icon(Icons.search, color: Color(0xFF9ba1bb)),
+                    ),
+                    suffixIcon: Padding(
+                      padding: const EdgeInsets.only(right: 12),
+                      child: GestureDetector(
+                        onTap: () {
+                          final controller = context.read<AlertsController>();
+                          final nav = context.read<NavigationProvider>();
+                          final mapState = context.read<MapStateProvider>();
 
-                            final filtered = controller.filteredAlerts;
+                          final filtered = controller.filteredAlerts;
 
-                            // ✅ Cargar las alertas filtradas o todas
-                            mapState.setAlerts(filtered);
+                          // ✅ Cargar las alertas filtradas o todas
+                          mapState.setAlerts(filtered);
 
-                            // ✅ Esperamos al siguiente frame, y luego movemos el mapa
-                            mapState.triggerCenterOnAlerts();
+                          // ✅ Esperamos al siguiente frame, y luego movemos el mapa
+                          mapState.triggerCenterOnAlerts();
 
-                            // ✅ Cambiar la pestaña al mapa
-                            nav.setIndex(1);
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFF2C3244),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Icon(
-                              Icons.map,
-                              color: Colors.white,
-                              size: 18,
-                            ),
+                          // ✅ Cambiar la pestaña al mapa
+                          nav.setIndex(1);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF2C3244),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: const Icon(
+                            Icons.map,
+                            color: Colors.white,
+                            size: 22, // 🔍 Más grande
                           ),
                         ),
-                      ],
+                      ),
                     ),
                     contentPadding: const EdgeInsets.symmetric(vertical: 14),
                   ),

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:global_alert_gnss/models/alert_message_model.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -44,45 +46,32 @@ LatLng calculateCenter(List<LatLng> coords) {
 /// Calcula un nivel de zoom adecuado, usando el radio cuando hay
 /// una sola ubicación, o la dispersión si son varias.
 double calculateZoomFromAlerts(List<AlertMessage> alerts) {
-  // Extrae todas las ubicaciones
-  final allLocs = alerts.expand((a) => a.locations ?? []).toList();
+  final coords = alerts
+      .expand((a) => a.locations ?? [])
+      .map((loc) => LatLng(loc.lat, loc.lon))
+      .toList();
 
-  // Si no hay ubicaciones, zoom base
-  if (allLocs.isEmpty) return 4;
+  if (coords.isEmpty) return 5;
+  if (coords.length == 1) return 10;
 
-  // Si sólo hay una ubicación, ajusta zoom según el radiusKm
-  if (allLocs.length == 1) {
-    final r = allLocs.first.radiusKm;
-    if (r < 0.5) return 13;
-    if (r < 2) return 12;
-    if (r < 5) return 10;
-    if (r < 20) return 8;
-    if (r < 80) return 6;
-    return 4; // area muy grande
-  }
+  double minLat = coords.first.latitude;
+  double maxLat = coords.first.latitude;
+  double minLng = coords.first.longitude;
+  double maxLng = coords.first.longitude;
 
-  // Si son múltiples, calcula bounding box
-  double minLat = allLocs.first.lat, maxLat = allLocs.first.lat;
-  double minLng = allLocs.first.lon, maxLng = allLocs.first.lon;
-
-  for (var loc in allLocs) {
-    if (loc.lat < minLat) minLat = loc.lat;
-    if (loc.lat > maxLat) maxLat = loc.lat;
-    if (loc.lon < minLng) minLng = loc.lon;
-    if (loc.lon > maxLng) maxLng = loc.lon;
+  for (var c in coords) {
+    minLat = min(minLat, c.latitude);
+    maxLat = max(maxLat, c.latitude);
+    minLng = min(minLng, c.longitude);
+    maxLng = max(maxLng, c.longitude);
   }
 
   final latDiff = maxLat - minLat;
   final lngDiff = maxLng - minLng;
-  final maxDiff = latDiff > lngDiff ? latDiff : lngDiff;
+  final maxDiff = max(latDiff, lngDiff);
 
-  // Umbrales suaves para múltiples puntos
-  if (maxDiff < 0.1) return 11;
-  if (maxDiff < 0.3) return 10;
-  if (maxDiff < 0.7) return 9;
-  if (maxDiff < 1.5) return 8;
-  if (maxDiff < 3.0) return 7;
-  if (maxDiff < 6.0) return 6;
-  if (maxDiff < 10.0) return 5;
-  return 4;
+  if (maxDiff <= 0) return 15;
+  final rawZoom = (log(360 / maxDiff) / ln2);
+  // Restricción entre niveles de zoom razonables
+  return rawZoom.clamp(4.0, 15.0);
 }
