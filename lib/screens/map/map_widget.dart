@@ -46,7 +46,7 @@ class MapWidget extends StatelessWidget {
               height: 50,
               point: LatLng(loc.lat, loc.lon),
               child: Transform.translate(
-                offset: const Offset(0, -14), // Ajusta para alinear visualmente
+                offset: const Offset(0, -12), // Ajusta para alinear visualmente
                 child: Icon(
                   Icons.location_on,
                   color: AlertUtils.getAlertColor(alert.type),

@@ -25,31 +25,39 @@ class FooterNavBar extends StatelessWidget {
             icon: Icons.home_rounded,
             label: loc.home,
             isActive: currentIndex == 0,
-            onTap: () => provider.setIndex(0),
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              provider.setIndex(0);
+            },
           ),
           _buildFooterButton(
             icon: Icons.map_rounded,
             label: loc.alertMap,
             isActive: currentIndex == 1,
             onTap: () {
+              FocusScope.of(context).unfocus();
               final mapState = context.read<MapStateProvider>();
-              mapState.setEntrySource(
-                MapEntrySource.fromFooter,
-              ); // 👈 Indicar fuente
-              provider.setIndex(1); // Cambiar a pestaña del mapa
+              mapState.setEntrySource(MapEntrySource.fromFooter);
+              provider.setIndex(1);
             },
           ),
           _buildFooterButton(
             icon: Icons.history_rounded,
             label: loc.history,
             isActive: currentIndex == 2,
-            onTap: () => provider.setIndex(2),
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              provider.setIndex(2);
+            },
           ),
           _buildFooterButton(
             icon: Icons.settings_rounded,
             label: loc.settings,
             isActive: currentIndex == 3,
-            onTap: () => provider.setIndex(3),
+            onTap: () {
+              FocusScope.of(context).unfocus();
+              provider.setIndex(3);
+            },
           ),
         ],
       ),

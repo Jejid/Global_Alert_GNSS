@@ -16,7 +16,14 @@ class AlertsSections extends StatefulWidget {
 }
 
 class _AlertsSectionsState extends State<AlertsSections> {
+  final FocusNode _searchFocusNode = FocusNode();
   int? _lastIndex;
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void didChangeDependencies() {
@@ -29,6 +36,10 @@ class _AlertsSectionsState extends State<AlertsSections> {
     final currentIndex = navProvider.currentIndex;
 
     if (_lastIndex != currentIndex) {
+      // Si estoy saliendo de esta pestaña (AlertsListScreen)
+      if (_lastIndex == 2) {
+        _searchFocusNode.unfocus(); // 👈 Desenfocar al salir
+      }
       if (currentIndex == 1) {
         final source = mapProvider.entrySource;
 
@@ -94,6 +105,7 @@ class _AlertsSectionsState extends State<AlertsSections> {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: TextField(
+                  focusNode: _searchFocusNode,
                   autofocus: false,
                   onChanged: controller.updateSearch,
                   style: const TextStyle(color: Colors.white),
