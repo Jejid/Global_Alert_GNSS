@@ -38,9 +38,21 @@ LatLng calculateCenter(List<LatLng> coords) {
     return const LatLng(4.236479, -72.708779); // fallback
   }
 
-  final totalLat = coords.fold(0.0, (sum, c) => sum + c.latitude);
-  final totalLng = coords.fold(0.0, (sum, c) => sum + c.longitude);
-  return LatLng(totalLat / coords.length, totalLng / coords.length);
+  double minLat = coords.first.latitude;
+  double maxLat = coords.first.latitude;
+  double minLng = coords.first.longitude;
+  double maxLng = coords.first.longitude;
+
+  for (final c in coords) {
+    if (c.latitude < minLat) minLat = c.latitude;
+    if (c.latitude > maxLat) maxLat = c.latitude;
+    if (c.longitude < minLng) minLng = c.longitude;
+    if (c.longitude > maxLng) maxLng = c.longitude;
+  }
+
+  final centerLat = (minLat + maxLat) / 2;
+  final centerLng = (minLng + maxLng) / 2;
+  return LatLng(centerLat, centerLng);
 }
 
 /// Calcula un nivel de zoom adecuado, usando el radio cuando hay

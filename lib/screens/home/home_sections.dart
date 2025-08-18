@@ -62,7 +62,7 @@ class HomeSections extends StatelessWidget {
                 ),
                 const Spacer(),
                 const Text(
-                  '(Last 3 days)',
+                  '(Last 3 months)',
                   style: TextStyle(color: Color(0xFF9ba1bb), fontSize: 13),
                 ),
               ],
@@ -113,7 +113,7 @@ class HomeSections extends StatelessWidget {
                 ),
                 const Spacer(),
                 const Text(
-                  '(Last 3 days)',
+                  '(Last 3 months)',
                   style: TextStyle(color: Color(0xFF9ba1bb), fontSize: 13),
                 ),
               ],

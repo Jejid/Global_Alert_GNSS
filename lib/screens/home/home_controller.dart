@@ -12,7 +12,7 @@ class HomeController with ChangeNotifier {
   late final Animation<double> fadeIn;
 
   List<AlertMessage> recentAlerts = [];
-  List<AlertMessage> monthlyAlerts = [];
+  List<AlertMessage> oldAlerts = [];
   List<Marker> recentMarkers = [];
 
   HomeController({required TickerProvider vsync}) {
@@ -30,22 +30,22 @@ class HomeController with ChangeNotifier {
 
   Future<void> _loadAlerts() async {
     final now = DateTime.now();
-    final threeDaysAgo = now.subtract(const Duration(days: 3));
-    final thirtyDaysAgo = now.subtract(const Duration(days: 30));
+    final threeMonthsAgo = now.subtract(const Duration(days: 90));
+    final oneYearAgo = now.subtract(const Duration(days: 365));
     final allAlerts = await AlertUtils.getAllAlerts();
 
-    final recent = <AlertMessage>[];
-    final month = <AlertMessage>[];
+    final threeMonths = <AlertMessage>[];
+    final oneYear = <AlertMessage>[];
     final markers = <Marker>[];
 
     for (final alert in allAlerts) {
-      if (alert.timestamp.isAfter(thirtyDaysAgo) &&
+      if (alert.timestamp.isAfter(oneYearAgo) &&
           alert.locations != null &&
           alert.locations!.isNotEmpty) {
-        month.add(alert);
+        oneYear.add(alert);
 
-        if (alert.timestamp.isAfter(threeDaysAgo)) {
-          recent.add(alert);
+        if (alert.timestamp.isAfter(threeMonthsAgo)) {
+          threeMonths.add(alert);
           final color = AlertUtils.getAlertColor(alert.type);
           for (final loc in alert.locations!) {
             markers.add(
@@ -61,8 +61,8 @@ class HomeController with ChangeNotifier {
       }
     }
 
-    recentAlerts = recent;
-    monthlyAlerts = month;
+    recentAlerts = threeMonths;
+    oldAlerts = oneYear; // for now no used
     recentMarkers = markers;
 
     notifyListeners();

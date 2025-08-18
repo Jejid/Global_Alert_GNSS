@@ -46,9 +46,9 @@ class MiniMapPreview extends StatelessWidget {
               ); // 🛰️ Carga las alertas recientes del minimapa
               mapState.setEntrySource(
                 MapEntrySource.fromMiniMap,
-              ); // 👈 Muy importante
-              mapState.triggerCenterOnAlerts(); // 🎯 Centrarse en ellas
-              nav.setIndex(1); // 🔄 Cambia a la pestaña de mapa
+              ); //  Muy importante
+              mapState.triggerCenterOnAlerts(); //  Centrarse en ellas
+              nav.setIndex(1); //  Cambia a la pestaña de mapa
             },
 
             child: SizedBox(
