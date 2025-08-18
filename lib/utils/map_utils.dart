@@ -55,6 +55,31 @@ LatLng calculateCenter(List<LatLng> coords) {
   return LatLng(centerLat, centerLng);
 }
 
+/// Calcula un centro más robusto para el mini mapa.
+/// Usa la mediana de latitudes y longitudes para evitar que
+/// outliers lejanos muevan el centro hacia zonas vacías.
+LatLng calculateMedianaCenter(List<LatLng> coords) {
+  if (coords.isEmpty) {
+    return const LatLng(4.236479, -72.708779); // fallback
+  }
+
+  final lats = coords.map((c) => c.latitude).toList()..sort();
+  final lngs = coords.map((c) => c.longitude).toList()..sort();
+
+  double medianLat;
+  double medianLng;
+
+  if (lats.length.isOdd) {
+    medianLat = lats[lats.length ~/ 2];
+    medianLng = lngs[lngs.length ~/ 2];
+  } else {
+    medianLat = (lats[lats.length ~/ 2 - 1] + lats[lats.length ~/ 2]) / 2;
+    medianLng = (lngs[lngs.length ~/ 2 - 1] + lngs[lngs.length ~/ 2]) / 2;
+  }
+
+  return LatLng(medianLat, medianLng);
+}
+
 /// Calcula un nivel de zoom adecuado, usando el radio cuando hay
 /// una sola ubicación, o la dispersión si son varias.
 double calculateZoomFromAlerts(List<AlertMessage> alerts) {

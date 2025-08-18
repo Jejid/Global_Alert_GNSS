@@ -20,8 +20,19 @@ class MiniMapPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Obtener todas las coordenadas de las alertas
     final coords = getAllCoordinates(alerts);
-    final center = calculateCenter(coords);
+
+    //No renderizar hasta que haya coordenadas
+    if (coords.isEmpty) {
+      return const SizedBox(
+        height: 200,
+        child: Center(child: Text("Cargando alertas... 🛰️")),
+      );
+    }
+
+    // Calcular centro y zoom con base a las coordenadas
+    final center = calculateMedianaCenter(coords);
     final zoom = calculateZoomFromAlerts(alerts);
 
     return Padding(
@@ -41,16 +52,11 @@ class MiniMapPreview extends StatelessWidget {
                 listen: false,
               );
 
-              mapState.setAlerts(
-                alerts,
-              ); // 🛰️ Carga las alertas recientes del minimapa
-              mapState.setEntrySource(
-                MapEntrySource.fromMiniMap,
-              ); //  Muy importante
-              mapState.triggerCenterOnAlerts(); //  Centrarse en ellas
-              nav.setIndex(1); //  Cambia a la pestaña de mapa
+              mapState.setAlerts(alerts); // 🛰️ Carga alertas recientes
+              mapState.setEntrySource(MapEntrySource.fromMiniMap);
+              mapState.triggerCenterOnAlerts();
+              nav.setIndex(1); // Cambia a la pestaña del mapa
             },
-
             child: SizedBox(
               height: 200,
               child: IgnorePointer(

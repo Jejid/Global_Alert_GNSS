@@ -62,7 +62,7 @@ class HomeController with ChangeNotifier {
     }
 
     recentAlerts = threeMonths;
-    oldAlerts = oneYear; // for now no used
+    oldAlerts = oneYear; // not used for now
     recentMarkers = markers;
 
     notifyListeners();

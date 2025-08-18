@@ -59,7 +59,7 @@ class MapControllerState with ChangeNotifier {
 
   void moveToAlertsArea(List<AlertMessage> alerts) {
     final coords = getAllCoordinates(alerts);
-    final center = calculateCenter(coords);
+    final center = calculateMedianaCenter(coords);
     final zoom = calculateZoomFromAlerts(alerts);
 
     if (coords.isNotEmpty) {
@@ -74,7 +74,7 @@ class MapControllerState with ChangeNotifier {
 
   @override
   void dispose() {
-    popupController.dispose(); // 👈 liberar
+    popupController.dispose(); //  liberar
     super.dispose();
   }
 }
