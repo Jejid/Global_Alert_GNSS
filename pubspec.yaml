@@ -45,6 +45,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/alerts_examples.json
+    - assets/alerts_examples_medium.json
 
 
 
