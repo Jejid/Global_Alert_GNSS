@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+
 import '../../models/alert_message_model.dart';
 import '../../services/gnss_stream_service.dart';
 
@@ -15,12 +17,22 @@ class AlertsController extends ChangeNotifier {
   List<AlertMessage> get filteredAlerts => _filteredAlerts;
 
   Future<void> init() async {
-    await gnssService.init();
-    _subscription = gnssService.getAlertStream().listen((alert) {
+    // 1) Subscribe first so we don't miss events emitted during gnssService.init()
+    _subscription ??= gnssService.getAlertStream().listen((alert) {
+      debugPrint(
+        'AlertsController received alert: ${alert.id} • ${alert.source}',
+      );
       _alerts.add(alert);
       _applySearch(_searchQuery);
       notifyListeners();
     });
+
+    // 2) Initialize the service (this can emit preloaded alerts)
+    await gnssService.init();
+
+    // 3) Ensure UI shows current content (in case no events were emitted)
+    _applySearch(_searchQuery);
+    notifyListeners();
   }
 
   void _applySearch(String query) {
@@ -28,10 +40,11 @@ class AlertsController extends ChangeNotifier {
     _filteredAlerts = _searchQuery.isEmpty
         ? List.from(_alerts)
         : _alerts.where((alert) {
-      final title = alert.title.toLowerCase();
-      final regions = alert.regions?.join(', ').toLowerCase() ?? '';
-      return title.contains(_searchQuery) || regions.contains(_searchQuery);
-    }).toList();
+            final title = alert.title.toLowerCase();
+            final regions = alert.regions?.join(', ').toLowerCase() ?? '';
+            return title.contains(_searchQuery) ||
+                regions.contains(_searchQuery);
+          }).toList();
   }
 
   void updateSearch(String query) {
