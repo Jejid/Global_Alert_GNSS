@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_popup/flutter_map_marker_popup.dart';
 import 'package:global_alert_gnss/models/alert_message_model.dart';
-import 'package:global_alert_gnss/utils/alert_utils.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:provider/provider.dart';
 
+import '../../utils/alert_ui_utils.dart';
 import '../../utils/map_utils.dart';
 import 'map_controller.dart';
 
@@ -73,13 +73,13 @@ class MapWidget extends StatelessWidget {
           for (var loc in alert.locations!)
             CircleMarker(
               point: LatLng(loc.lat, loc.lon),
-              radius: loc.radiusKm * 1000,
+              radius: loc.radiusMeters ?? 0,
               // en metros
               useRadiusInMeter: true,
               color: AlertUtils.getAlertColor(alert.type).withOpacity(0.35),
               borderColor: AlertUtils.getAlertColor(
                 alert.type,
-              ).withOpacity(0.50),
+              ).withValues(alpha: 0.50),
               borderStrokeWidth: 1.5,
             ),
     ];

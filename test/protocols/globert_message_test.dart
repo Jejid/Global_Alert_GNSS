@@ -5,8 +5,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:global_alert_gnss/protocols/globert/globert_fragmenter.dart';
-import 'package:global_alert_gnss/protocols/globert/globert_message.dart';
+import 'package:global_alert_gnss/protocols/globert_medium/globert_fragmenter.dart';
+import 'package:global_alert_gnss/protocols/globert_medium/globert_message.dart';
 
 void main() {
   test('GlobertMessage encode -> decode roundtrip', () {

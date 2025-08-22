@@ -5,7 +5,7 @@ import '../../l10n/app_localizations.dart';
 import '../../models/alert_message_model.dart';
 import '../../models/map_entry_source.dart';
 import '../../providers/map_state_provider.dart';
-import '../../utils/alert_utils.dart';
+import '../../utils/alert_ui_utils.dart';
 import '../map/map_screen.dart';
 import 'alert_detail_card.dart';
 import 'alert_detail_header.dart';

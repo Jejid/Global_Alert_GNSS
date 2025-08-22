@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../models/alert_message_model.dart';
-import '../../utils/alert_utils.dart';
+import '../../utils/alert_ui_utils.dart';
 
 class AlertCard extends StatelessWidget {
   final AlertMessage alert;
@@ -23,7 +24,7 @@ class AlertCard extends StatelessWidget {
             color: Colors.black.withOpacity(0.1),
             blurRadius: 6,
             offset: const Offset(0, 3),
-          )
+          ),
         ],
       ),
       child: Row(

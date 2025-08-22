@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+
 import '../../models/alert_message_model.dart';
-import '../../utils/alert_utils.dart';
+import '../../utils/alert_ui_utils.dart';
 
 class AlertDetailHeader extends StatelessWidget {
   final AlertMessage alert;

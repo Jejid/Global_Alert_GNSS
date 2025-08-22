@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:global_alert_gnss/utils/alert_utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/alert_message_model.dart';
 import '../../models/map_entry_source.dart';
 import '../../providers/map_state_provider.dart';
 import '../../providers/navigation_provider.dart';
+import '../../utils/alert_ui_utils.dart';
 import 'map_controller.dart';
 import 'map_sections.dart';
 import 'user_gps_button.dart';

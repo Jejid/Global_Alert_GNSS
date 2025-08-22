@@ -46,6 +46,7 @@ flutter:
   assets:
     - assets/alerts_examples.json
     - assets/alerts_examples_medium.json
+    - assets/alerts_examples_camf.json
 
 
 

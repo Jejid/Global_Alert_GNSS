@@ -1,7 +1,8 @@
+// lib/utils/alert_ui_utils.dart
 import 'package:flutter/material.dart';
-import 'package:lucide_icons/lucide_icons.dart';
-import 'package:intl/intl.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 
 import '../models/alert_message_model.dart';
 import '../services/alert_service.dart';
